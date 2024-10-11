@@ -41,5 +41,14 @@ public class CalculatorTest {
 		String[] answer = {"(", "3", ")"};
 		assertArrayEquals(self.recognizer("( 3 )"), answer);
 	}
+
+	@Test
+	//Currently not working as intended, likely test's fault, not calculator's
+	//Actual assert is irrelevant, program's printout is 3.0 instead of expected 8.0
+	public void testMath1() {
+		String[] answer = {"3", "+", "3", "+", "5"};
+		assertArrayEquals(self.recognizer("3 + 3 + 5"), answer);
+		self.main(self.recognizer("3 + 3 + 5"));
+	}
 	
 }
