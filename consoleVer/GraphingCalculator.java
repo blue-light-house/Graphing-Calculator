@@ -1,9 +1,9 @@
 import java.lang.System;
 import java.util.*;
 
-public class GraphingCalculator {
+public class Calculator {
 	
-	public GraphingCalculator() {
+	public Calculator() {
 	}
 	
 	private String[] recognizer(String expression) {
@@ -104,7 +104,7 @@ public class GraphingCalculator {
 	
     public static void main(String[] args) {
         System.out.println("Hello World!");
-		GraphingCalculator self = new GraphingCalculator();
+		Calculator self = new Calculator();
 		if (args.length > 0) {
 			String[] test = self.recognizer(args[0]);
 			for (String s : test) {

@@ -3,12 +3,12 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-public class GraphingCalculatorTest {
-	GraphingCalculator self = null;
+public class CalculatorTest {
+	Calculator self = null;
 	
 	@Before
 	public void setUp() throws Exception {
-		self = new GraphingCalculator;
+		self = new Calculator();
 	}
 	
 	@Test
