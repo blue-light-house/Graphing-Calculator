@@ -29,6 +29,17 @@ public class CalculatorTest {
 		String[] answer = {"3", "*", "3", "*", "3", "*", "3", "*", "3"};
 		assertArrayEquals(self.recognizer("3 * 3 * 3 * 3 * 3"), answer);
 	}
+
+	@Test
+	public void testRecognizer4() {
+		String[] answer = {"3", "^", "5"};
+		assertArrayEquals(self.recognizer("3 ^ 5"), answer);
+	}
 	
+	@Test
+	public void testRecognizer5() {
+		String[] answer = {"(", "3", ")"};
+		assertArrayEquals(self.recognizer("( 3 )"), answer);
+	}
 	
 }
