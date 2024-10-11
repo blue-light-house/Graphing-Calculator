@@ -18,14 +18,18 @@ public class GraphingCalculator {
 		
 		// Tier 2: Multiplication, Division
 		for (int i = 0; i < expression.length; i++) {
-			if (expression[index].equals("*")) {
-				evaluatePositionsT2.add(index);
-			} else if (expression[index].equals("/")) {
-				evaluatePositionsT2.add(index);
-			} else {
-				throw new IllegalArgumentException("Invalid operation in expression!");
+			if (expression[i].equals("*")) {
+				evaluatePositionsT2.add(i);
+			} else if (expression[i].equals("/")) {
+				evaluatePositionsT2.add(i);
 			}
 		}
+		
+		/*
+		System.out.println("Finished reading in T2");
+		for (Integer i : evaluatePositionsT2) {
+			System.out.println((int) i);
+		} */
 		
 		// Tier 2 Evaluation: Multiplication, Division
 		for (Integer i : evaluatePositionsT2) {
@@ -44,42 +48,57 @@ public class GraphingCalculator {
 				expression[i+3] = "";
 			}
 			
-			if (expression[i] == "*") {
-				dTemp *= Double.parseDouble(sTemp);
-			} else {
+			if (expression[i].equals("*")) {
+				dTemp = dTemp * Double.parseDouble(sTemp);
+			} else if (expression[i].equals("/")) {
 				dTemp /= Double.parseDouble(sTemp);
 			}
 			
-			expression[i] = 0;
-			expression[i-1] = dTemp.toString;
+			expression[i] = "";
+			expression[i-1] = Double.toString(dTemp);
 		}
 		
 		// Tier 1 Evaluation: Addition, Subtraction
 		
+		double toReturn = 0;
 		int index = 0;
 		while (index < expression.length) {
-			if (expression[index].equals("")) {
+			if (!expression[index].equals("")) {
+				//System.out.println(expression[index]);
 				toReturn = Double.parseDouble(expression[index]);
 				break;
 			} else {
-				
+				index+=2;
 			}
 		}
-		while (index < expression.length - 1) {
+		index++;
+		while (index < expression.length) {
 			if (expression[index].equals("+")) {
-				toReturn += Double.parseDouble(expression[index+1]);
+				toReturn += Double.parseDouble(findFirstNonEmpty(expression, index+1));
 				index +=2;
 			} else if (expression[index].equals("-")) {
-				toReturn -= Double.parseDouble(expression[index+1]);
+				toReturn -= Double.parseDouble(findFirstNonEmpty(expression, index+1));
 				index +=2;
 			} else if (expression[index].equals("^")) {
 				index +=2;
 				System.out.println("Coming soon!");
+			} else if (expression[index].equals("")) {
+				index +=2;
 			} else {
 				throw new IllegalArgumentException("Invalid operation in expression!");
 			}
 		}
 		
+		return toReturn;
+	}
+	
+	private String findFirstNonEmpty(String[] expression, int startIndex) {
+		int index = startIndex;
+		String toReturn = expression[index];
+		while (toReturn.equals("") && index < expression.length) {
+			index++;
+			toReturn = expression[index];
+		}
 		return toReturn;
 	}
 	
