@@ -1,7 +1,9 @@
 import java.lang.System;
 import java.util.*;
+import java.lang.Math.*;
 
 public class Calculator {
+	String chars[] = {"(", ")", "^", "*", "/", "+", "-"};
 	
 	public Calculator() {
 	}
@@ -14,7 +16,35 @@ public class Calculator {
 	private double evaluate (String[] expression) throws IllegalArgumentException {
 		if(expression.length % 2 != 1) throw new IllegalArgumentException("Expression input is invalid!");
 		boolean evaluating = true;
+		ArrayList<Integer> evaluatePositionsT3 = new ArrayList<Integer>();
 		ArrayList<Integer> evaluatePositionsT2 = new ArrayList<Integer>();
+		
+		// Tier 3: Exponents
+		for (int i = 0; i < expression.length; i++) {
+			if (expression[i].equals("^")) {
+				evaluatePositionsT3.add(i);
+			}
+		}
+		
+		// Tier 3 Evaluation: Exponents
+		for (Integer i : evaluatePositionsT3) {
+			double dTemp = 0.0;
+			int iTemp = findFirstNonEmpty(expression, i, -1);
+			String sTemp = expression[iTemp];
+			expression[iTemp] = "";
+			dTemp = Double.parseDouble(sTemp);
+			iTemp = findFirstNonEmpty(expression, i, 1);
+			sTemp = expression[iTemp];
+			expression[iTemp] = "";
+			
+			if (expression[i].equals("^")) {
+				dTemp = Math.pow(dTemp, Double.parseDouble(sTemp));
+			}
+			
+			expression[i] = "";
+			expression[i-1] = Double.toString(dTemp);
+		}
+		
 		
 		// Tier 2: Multiplication, Division
 		for (int i = 0; i < expression.length; i++) {
@@ -34,19 +64,13 @@ public class Calculator {
 		// Tier 2 Evaluation: Multiplication, Division
 		for (Integer i : evaluatePositionsT2) {
 			double dTemp = 0.0;
-			String sTemp = expression[i - 1];
-			expression[i-1] = "";
-			if (sTemp.equals("")) {
-				sTemp = expression[i-3];
-				expression[i-3] = "";
-			}
+			int iTemp = findFirstNonEmpty(expression, i, -1);
+			String sTemp = expression[iTemp];
+			expression[iTemp] = "";
 			dTemp = Double.parseDouble(sTemp);
-			sTemp = expression[i + 1];
-			expression[i+1] = "";
-			if (sTemp.equals("")) {
-				sTemp = expression[i+3];
-				expression[i+3] = "";
-			}
+			iTemp = findFirstNonEmpty(expression, i, 1);
+			sTemp = expression[iTemp];
+			expression[iTemp] = "";
 			
 			if (expression[i].equals("*")) {
 				dTemp = dTemp * Double.parseDouble(sTemp);
@@ -74,14 +98,11 @@ public class Calculator {
 		index++;
 		while (index < expression.length) {
 			if (expression[index].equals("+")) {
-				toReturn += Double.parseDouble(findFirstNonEmpty(expression, index+1));
+				toReturn += Double.parseDouble(expression[findFirstNonEmpty(expression, index+1, 1)]);
 				index +=2;
 			} else if (expression[index].equals("-")) {
-				toReturn -= Double.parseDouble(findFirstNonEmpty(expression, index+1));
+				toReturn -= Double.parseDouble(expression[findFirstNonEmpty(expression, index+1, 1)]);
 				index +=2;
-			} else if (expression[index].equals("^")) {
-				index +=2;
-				System.out.println("Coming soon!");
 			} else if (expression[index].equals("")) {
 				index +=2;
 			} else {
@@ -92,14 +113,14 @@ public class Calculator {
 		return toReturn;
 	}
 	
-	private String findFirstNonEmpty(String[] expression, int startIndex) {
+	private int findFirstNonEmpty(String[] expression, int startIndex, int dir) {
 		int index = startIndex;
 		String toReturn = expression[index];
-		while (toReturn.equals("") && index < expression.length) {
-			index++;
+		while ((toReturn.equals("") || Arrays.asList(chars).contains(toReturn))&& index < expression.length) {
+			index+= dir;
 			toReturn = expression[index];
 		}
-		return toReturn;
+		return index;
 	}
 	
     public static void main(String[] args) {
