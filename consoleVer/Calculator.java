@@ -6,6 +6,7 @@ public class Calculator {
 	String chars[] = {"(", ")", "^", "*", "/", "+", "-"};
 	
 	public Calculator() {
+		// test change
 	}
 	
 	public String[] recognizer(String expression) {
