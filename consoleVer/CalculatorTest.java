@@ -20,4 +20,10 @@ public class CalculatorTest {
 	public void testRecognizer2]() {
 		assertArrayEquals(self.recognizr("3 + 5 * 2 / 8 + 4.5"), ["3", "+", "5", "*", "2", "/", "8", "+", "4.5"]);
 	}
+	
+	@Test
+	public void testEvaluate1() {
+		String testString = "3 + 5";
+		assertEquals(self.evaluate(self.recognizer(testString)), 8);
+	}
 }
