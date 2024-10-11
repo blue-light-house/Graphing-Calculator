@@ -8,16 +8,43 @@ public class Calculator {
 	public Calculator() {
 	}
 	
-	private String[] recognizer(String expression) {
+	public String[] recognizer(String expression) {
 		String[] splitExpression = expression.trim().split("\\s+");
 		return splitExpression;
 	}
 	
-	private double evaluate (String[] expression) throws IllegalArgumentException {
+	public double evaluate (String[] expression) throws IllegalArgumentException {
 		if(expression.length % 2 != 1) throw new IllegalArgumentException("Expression input is invalid!");
 		boolean evaluating = true;
+		ArrayList<Integer> evaluatePositionsT4 = new ArrayList<Integer>();
 		ArrayList<Integer> evaluatePositionsT3 = new ArrayList<Integer>();
 		ArrayList<Integer> evaluatePositionsT2 = new ArrayList<Integer>();
+		
+		// Tier 4: Parentheses
+		for (int i = 0; i < expression.length; i++) {
+			if (expression[i].equals("(")) {
+				evaluatePositionsT4.add(i);
+			} else if (expression[i].equals(")")) {
+				evaluatePositionsT4.add(i);
+			}
+		}
+		
+		// Tier 4 Evaluation: Parentheses
+		for (int i = 0; i < evaluatePositionsT4.size(); i+=2) {
+			int openParen = evaluatePositionsT4.get(i);
+			int closeParen = evaluatePositionsT4.get(i+1);
+			String[] innerParenthesesEvaluation = new String[closeParen - openParen - 1];
+			int tempIndex = 0;
+			for (int e = openParen+1; e < closeParen; e++) {
+				innerParenthesesEvaluation[tempIndex] = expression[e];
+				tempIndex+=1;
+			}
+			double dTemp = evaluate(innerParenthesesEvaluation);
+			for (int e = openParen+1; e <= closeParen; e++) {
+				expression[e] = "";
+			}
+			expression[openParen] = Double.toString(dTemp);
+		}
 		
 		// Tier 3: Exponents
 		for (int i = 0; i < expression.length; i++) {
@@ -96,6 +123,7 @@ public class Calculator {
 			}
 		}
 		index++;
+		
 		while (index < expression.length) {
 			if (expression[index].equals("+")) {
 				toReturn += Double.parseDouble(expression[findFirstNonEmpty(expression, index+1, 1)]);
