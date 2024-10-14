@@ -43,11 +43,9 @@ public class CalculatorTest {
 	}
 
 	@Test
-	//Currently not working as intended, likely test's fault, not calculator's
-	//Actual assert is irrelevant, program's printout is 3.0 instead of expected 8.0
 	public void testMath1() {
-		double answer = 11;
-		AssertEquals(self.evaluate(self.recognizer("3 + 3 + 5")), answer);
+		String[] answer = {"3", "+", "3", "+", "5"};
+		assertEquals(11.0, self.evaluate(answer), 0.005);
 	}
 	
 }
