@@ -14,8 +14,7 @@ public class Calculator {
 		return splitExpression;
 	}
 	
-	public double evaluate (String[] expression) throws IllegalArgumentException {
-		if(expression.length % 2 != 1) throw new IllegalArgumentException("Expression input is invalid!");
+	public double evaluate (String[] expression) {
 		boolean evaluating = true;
 		ArrayList<Integer> evaluatePositionsT4 = new ArrayList<Integer>();
 		ArrayList<Integer> evaluatePositionsT3 = new ArrayList<Integer>();
