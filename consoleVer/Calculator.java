@@ -15,22 +15,14 @@ public class Calculator {
 	}
 	
 	public double evaluate (String[] expression, int startPos, int endPos) {
-		boolean evaluating = true;
-		ArrayList<Integer> evaluatePositionsT4Open = new ArrayList<Integer>();
-		ArrayList<Integer> evaluatePositionsT4Closed = new ArrayList<Integer>();
-		ArrayList<Integer> evaluatePositionsT4Together = new ArrayList<Integer>();
 		ArrayList<Integer> evaluatePositionsT3 = new ArrayList<Integer>();
 		ArrayList<Integer> evaluatePositionsT2 = new ArrayList<Integer>();
 		ArrayList<Integer> evaluatePositionsT1 = new ArrayList<Integer>();
 		
-		/**
-		JUST GO LEFT TO RIGHT, IF YOU FIND AN OPEN GO UNTIL A CLOSED, COUNT OPENS IN THE MIDDLE SO YOU DON'T MESS UP
-		THEN EVALUATE, REPLACE, MOVE ON
-		DON'T FIND THEM ALL AT ONCE AND EVALUATE LIKE THE OTHERS
-		*/
-		
+		/*
 		System.out.println("BEFORE T4");
 		printExpression(expression);
+		*/
 		
 		// Tier 4: Parentheses
 		int openFound = 0;
@@ -41,20 +33,20 @@ public class Calculator {
 			if (expression[i].equals("(")) {
 				openFound++;
 				openFirst = i;
-				System.out.println("FOUND OPEN AT " + i );
+				// System.out.println("FOUND OPEN AT " + i );
 			} else if (expression[i].equals(")")) {
 				closedFound++;
 				closedLast = i;
-				System.out.println("FOUND CLOSED AT " + i );
+				// System.out.println("FOUND CLOSED AT " + i );
 			}
 			
 			if (openFound == closedFound && (openFound != 0)) {
-				System.out.println("EVALUATING FROM " + openFirst + " TO " + closedLast);
+				// System.out.println("EVALUATING FROM " + openFirst + " TO " + closedLast);
 				double result = evaluate(expression, openFirst+1, closedLast);
 				// LEAVING OPEN PARENTHESES BEHIND - CONSIDER FIXING
 				for (int e = openFirst; e <= closedLast; e++) {
 					expression[e] = "";
-					System.out.println("REPLACING");
+					// System.out.println("REPLACING");
 				}
 				expression[openFirst] = Double.toString(result);
 				openFound = 0;
@@ -62,8 +54,10 @@ public class Calculator {
 			}
 		}
 		
+		/*
 		System.out.println("BEFORE T3");
 		printExpression(expression);
+		*/
 		
 		// Tier 3: Exponents
 		for (int i = startPos; i < endPos; i++) {
@@ -91,8 +85,10 @@ public class Calculator {
 			expression[i-1] = Double.toString(dTemp);
 		}
 		
+		/*
 		System.out.println("BEFORE T2");
 		printExpression(expression);
+		*/
 		
 		// Tier 2: Multiplication, Division
 		for (int i = startPos; i < endPos; i++) {
@@ -108,8 +104,6 @@ public class Calculator {
 			double dTemp = 0.0;
 			int iTemp = findFirstNonEmpty(expression, i, startPos, endPos, -1);
 			String sTemp = expression[iTemp];
-			System.out.println(sTemp);
-			System.out.println(iTemp);
 			expression[iTemp] = "";
 			dTemp = Double.parseDouble(sTemp);
 			iTemp = findFirstNonEmpty(expression, i, startPos, endPos, 1);
@@ -126,8 +120,10 @@ public class Calculator {
 			expression[i-1] = Double.toString(dTemp);
 		}
 		
+		/*
 		System.out.println("BEFORE T1");
 		printExpression(expression);
+		*/
 		
 		// Tier 1: Addition, Subtraction
 		for (int i = startPos; i < endPos; i++) {
@@ -139,11 +135,10 @@ public class Calculator {
 		}
 		
 		// Tier 1 Evaluation: Addition, Subtraction
-		System.out.println("Len" + expression.length);
+		// System.out.println("Len" + expression.length);
 		int startPosT1 = findFirstNonEmpty(expression, 0, startPos, endPos, 1);
 		double toReturn = Double.parseDouble(expression[startPosT1]);
 		for (Integer i : evaluatePositionsT1) {
-			System.out.println(i);
 			int iTemp = findFirstNonEmpty(expression, i, startPos, endPos, 1);
 			String sTemp = expression[iTemp];
 			
@@ -154,25 +149,27 @@ public class Calculator {
 			}
 		}
 		
-		System.out.println("FLAG IN EVALUATE");
-		
 		return toReturn;
 	}
 	
 	private int findFirstNonEmpty(String[] expression, int startIndex, int startPos, int endPos, int dir) {
 		int index = startIndex < startPos ? startPos : startIndex;
 		index = index > endPos ? endPos : index;
+		/*
 		System.out.println("STARTING NONEMPTY SEARCH WITH FOLLOWING PARAMETERS:");
 		System.out.print("EXPRESSION: ");
 		printExpression(expression);
 		System.out.println("START INDEX: " + startIndex);
 		System.out.println("LEFT BOUND: " + startPos + " RIGHT BOUND: " + endPos);
 		System.out.println("DIRECTION: " + dir);
+		*/
 		String toReturn = expression[index];
 		while ((toReturn.equals("") || Arrays.asList(chars).contains(toReturn))&& (index < endPos && index >= startPos)) {
+			/*
 			System.out.println("CURRENT INDEX " + index);
 			System.out.println("CURRENT VALUE " + toReturn);
 			System.out.println("LEFT BOUND " + startPos + " STARTING AT " + startIndex + " RIGHT BOUND " + endPos);
+			*/
 			index+= dir;
 			toReturn = expression[index];
 		}
@@ -190,9 +187,9 @@ public class Calculator {
 		Calculator self = new Calculator();
 		if (args.length > 0) {
 			String[] test = self.recognizer(args[0]);
-			System.out.println("BEFORE EVALUATE");
+			System.out.print("Evaluating the following expression: ");
 			self.printExpression(test);
-			System.out.println(self.evaluate(test, 0, test.length));
+			System.out.println("Result: " + self.evaluate(test, 0, test.length));
 		}
     }
 }
