@@ -51,6 +51,7 @@ public class Calculator {
 			if (openFound == closedFound && (openFound != 0)) {
 				System.out.println("EVALUATING FROM " + openFirst + " TO " + closedLast);
 				double result = evaluate(expression, openFirst+1, closedLast);
+				// LEAVING OPEN PARENTHESES BEHIND - CONSIDER FIXING
 				for (int e = openFirst; e <= closedLast; e++) {
 					expression[e] = "";
 					System.out.println("REPLACING");
