@@ -50,7 +50,7 @@ public class Calculator {
 			
 			if (openFound == closedFound && (openFound != 0)) {
 				System.out.println("EVALUATING FROM " + openFirst + " TO " + closedLast);
-				double result = evaluate(expression, openFirst+1, closedLast-1);
+				double result = evaluate(expression, openFirst+1, closedLast);
 				for (int e = openFirst; e <= closedLast; e++) {
 					expression[e] = "";
 					System.out.println("REPLACING");
