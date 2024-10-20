@@ -31,8 +31,8 @@ public class Calculator {
 		int closedLast = 0;
 		for (int i = startPos; i < endPos; i++) {
 			if (expression[i].equals("(")) {
+				if (openFound == 0) openFirst = i;
 				openFound++;
-				openFirst = i;
 				// System.out.println("FOUND OPEN AT " + i );
 			} else if (expression[i].equals(")")) {
 				closedFound++;
