@@ -14,7 +14,7 @@ public class Calculator {
 		return splitExpression;
 	}
 	
-	public double evaluate (String[] expression, int startPos, int endPos) {
+	public double evaluate (String[] expression, int startPos, int endPos) throws IllegalArgumentException {
 		ArrayList<Integer> evaluatePositionsT3 = new ArrayList<Integer>();
 		ArrayList<Integer> evaluatePositionsT2 = new ArrayList<Integer>();
 		ArrayList<Integer> evaluatePositionsT1 = new ArrayList<Integer>();
@@ -52,6 +52,10 @@ public class Calculator {
 				openFound = 0;
 				closedFound = 0;
 			}
+		}
+		
+		if (openFound != closedFound) {
+			throw new IllegalArgumentException("Exception in evaluate (T4): Number of parentheses do not match!");
 		}
 		
 		/*
@@ -173,6 +177,13 @@ public class Calculator {
 			index+= dir;
 			toReturn = expression[index];
 		}
+		
+		try {
+			Double.parseDouble(expression[index]);
+		} catch (NumberFormatException e) {
+			throw new IllegalArgumentException("Exception in findFirstNonempty: Invalid character!");
+		}
+		
 		return index;
 	}
 	
