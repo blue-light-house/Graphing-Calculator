@@ -10,7 +10,7 @@ public class Calculator {
 	}
 	
 	public String[] recognizer(String expression) {
-		String[] splitExpression = expression.trim().split("\\s+");
+		String[] splitExpression = (String.join("", expression.trim().split(" "))).split("");
 		return splitExpression;
 	}
 	
