@@ -10,8 +10,51 @@ public class Calculator {
 	}
 	
 	public String[] recognizer(String expression) {
-		String[] splitExpression = (String.join("", expression.trim().split(" "))).split("");
-		return splitExpression;
+		String trimmedExpression = expression.trim();
+		int trimLength = trimmedExpression.length();
+		String[] splitExpression = new String[trimmedExpression.length()];
+		splitExpression[0] = trimmedExpression;
+		int splitExpPos = 0;
+		int lastBeginPos = 0;
+		for (int i = 0; i < trimLength; i++) {
+			String current = Character.toString(trimmedExpression.charAt(i));
+			if (Arrays.asList(chars).contains(current) || current.equals(" ")) {
+				String leftSubstring = trimmedExpression.substring(lastBeginPos, i);
+				// System.out.println(leftSubstring);
+				// System.out.println(current);
+				String rightSubstring = trimmedExpression.substring(i+1, trimLength);
+				// System.out.println(rightSubstring);
+				// System.out.println("SPLITEXPPOS: " + splitExpPos + " LASTBEGINPOS: " + lastBeginPos);
+				if (!leftSubstring.equals("")) {
+					splitExpression[splitExpPos] = leftSubstring;
+					splitExpPos++;
+				}
+				if (!current.equals(" ")) {
+					splitExpression[splitExpPos] = current;
+					splitExpPos++;
+				}
+				if (!rightSubstring.equals("")) {
+					splitExpression[splitExpPos] = rightSubstring;
+				}
+				lastBeginPos = i+1;
+				// System.out.println("CHANGED");
+				// printExpression(splitExpression);
+			}
+		}
+		int limit = splitExpression.length;
+		for (int i = 0; i < splitExpression.length; i++) {
+			if (splitExpression[i] == null ) {
+				limit = i;
+				break;
+			}
+		}
+		String[] returnExpression = new String[limit];
+		for (int i = 0; i < limit; i++) {
+			returnExpression[i] = splitExpression[i];
+		}
+		// System.out.println("FLAG");
+		// printExpression(returnExpression);
+		return returnExpression;
 	}
 	
 	public double evaluate (String[] expression, int startPos, int endPos) throws IllegalArgumentException {
@@ -30,6 +73,7 @@ public class Calculator {
 		int openFirst = 0;
 		int closedLast = 0;
 		for (int i = startPos; i < endPos; i++) {
+			// System.out.println(expression[i]);
 			if (expression[i].equals("(")) {
 				if (openFound == 0) openFirst = i;
 				openFound++;
@@ -188,10 +232,11 @@ public class Calculator {
 	}
 	
 	private void printExpression(String[] expression) {
+		System.out.println("Length: " + expression.length);
 		for (String s : expression) {
-				System.out.print(s);
-			}
-			System.out.println();
+			System.out.println(s);
+		}
+		System.out.println();
 	}
 	
     public static void main(String[] args) {
