@@ -2,6 +2,7 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.shape.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.geometry.*;
@@ -47,13 +48,6 @@ public class GraphingCalculator extends Application {
         });
 		Button evalToGraphButton = new Button();
 		evalToGraphButton.setText("GRAPHING MODE");
-        evalToGraphButton.setOnAction(new EventHandler<ActionEvent>() {
- 
-            @Override
-            public void handle(ActionEvent event) {
-				primaryStage.setScene(graphingScene);
-            }
-        });
         
         VBox evaluationRoot = new VBox(8);
 		evaluationRoot.setAlignment(Pos.CENTER);
@@ -66,8 +60,19 @@ public class GraphingCalculator extends Application {
 		
 		// GRAPHING SCENE
 		
-		VBox graphingRoot = new VBox(8);
+		GridPane graphingRoot = new GridPane();
 		graphingRoot.setAlignment(Pos.CENTER);
+		Pane graphingCanvas = new Pane();
+		Button updateGraphButton = new Button();
+		updateGraphButton.setText("UPDATE GRAPH");
+        updateGraphButton.setOnAction(new EventHandler<ActionEvent>() {
+ 
+            @Override
+            public void handle(ActionEvent event) {
+				updateGraphingCanvas(graphingCanvas);
+				
+            }
+        });
 		Button graphToEvalButton = new Button();
 		graphToEvalButton.setText("EVALUATION MODE");
         graphToEvalButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -80,12 +85,39 @@ public class GraphingCalculator extends Application {
 				
             }
         });
+		
+		graphingRoot.getChildren().add(graphingCanvas);
+		graphingRoot.setRowIndex(graphingCanvas, 0);
+		graphingRoot.setColumnIndex(graphingCanvas, 0);
+		graphingRoot.setAlignment(Pos.CENTER);
+		
+		graphingRoot.getChildren().add(updateGraphButton);
+		graphingRoot.setRowIndex(updateGraphButton, 1);
+		graphingRoot.setColumnIndex(updateGraphButton, 0);
+		
 		graphingRoot.getChildren().add(graphToEvalButton);
+		graphingRoot.setRowIndex(graphToEvalButton, 2);
+		graphingRoot.setColumnIndex(graphToEvalButton, 0);
+		
 		graphingScene = new Scene(graphingRoot, 600, 500);
+		
+		evalToGraphButton.setOnAction(new EventHandler<ActionEvent>() {
+ 
+            @Override
+            public void handle(ActionEvent event) {
+				primaryStage.setScene(graphingScene);
+				graphingCanvas.getChildren().clear();
+            }
+        });
 		
 		// WINDOW DRESSING
 		
-        primaryStage.setScene(evaluationScene);
+        primaryStage.setScene(graphingScene);
         primaryStage.show();
     }
+	
+	private void updateGraphingCanvas(Pane canvas) {
+		Line line = new Line(0, 0, 100, 500);
+		canvas.getChildren().add(line);
+	}
 }
