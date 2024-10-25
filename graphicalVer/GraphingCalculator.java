@@ -4,12 +4,15 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.geometry.*;
 import javafx.stage.Stage;
 import java.lang.Math;
 import java.util.*;
  
 public class GraphingCalculator extends Application {
 	private Calculator calc = new Calculator();
+	Scene evaluationScene = null;
+	Scene graphingScene = null;
 	
     public static void main(String[] args) {
         launch(args);
@@ -18,6 +21,9 @@ public class GraphingCalculator extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("CS3141 Team Software Project: Graphing Calculator");
+		
+		// EVALUATION SCENE
+		
 		TextField evaluateText = new TextField();
         Button evaluateButton = new Button();
 		Label evaluateLabel = new Label("NO CURRENT EVALUATION");
@@ -39,12 +45,47 @@ public class GraphingCalculator extends Application {
 				}
             }
         });
+		Button evalToGraphButton = new Button();
+		evalToGraphButton.setText("GRAPHING MODE");
+        evalToGraphButton.setOnAction(new EventHandler<ActionEvent>() {
+ 
+            @Override
+            public void handle(ActionEvent event) {
+				primaryStage.setScene(graphingScene);
+            }
+        });
         
-        TilePane root = new TilePane();
-		root.getChildren().add(evaluateText);
-        root.getChildren().add(evaluateButton);
-		root.getChildren().add(evaluateLabel);
-        primaryStage.setScene(new Scene(root, 300, 250));
+        VBox evaluationRoot = new VBox(8);
+		evaluationRoot.setAlignment(Pos.CENTER);
+		evaluationRoot.getChildren().add(evaluateText);
+        evaluationRoot.getChildren().add(evaluateButton);
+		evaluationRoot.getChildren().add(evaluateLabel);
+		evaluationRoot.getChildren().add(evalToGraphButton);
+		//evaluationRoot.setHalignment(child, HPos.CENTER);
+		evaluationScene = new Scene(evaluationRoot, 600, 500);
+		
+		// GRAPHING SCENE
+		
+		VBox graphingRoot = new VBox(8);
+		graphingRoot.setAlignment(Pos.CENTER);
+		Button graphToEvalButton = new Button();
+		graphToEvalButton.setText("EVALUATION MODE");
+        graphToEvalButton.setOnAction(new EventHandler<ActionEvent>() {
+ 
+            @Override
+            public void handle(ActionEvent event) {
+				evaluateLabel.setText("NO CURRENT EVALUATION");
+				evaluateText.setText("");
+				primaryStage.setScene(evaluationScene);
+				
+            }
+        });
+		graphingRoot.getChildren().add(graphToEvalButton);
+		graphingScene = new Scene(graphingRoot, 600, 500);
+		
+		// WINDOW DRESSING
+		
+        primaryStage.setScene(evaluationScene);
         primaryStage.show();
     }
 }
