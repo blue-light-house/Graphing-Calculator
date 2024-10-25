@@ -69,7 +69,7 @@ public class GraphingCalculator extends Application {
  
             @Override
             public void handle(ActionEvent event) {
-				updateGraphingCanvas(graphingCanvas);
+				updateGraphingCanvas(graphingCanvas, primaryStage);
 				
             }
         });
@@ -107,6 +107,7 @@ public class GraphingCalculator extends Application {
             public void handle(ActionEvent event) {
 				primaryStage.setScene(graphingScene);
 				graphingCanvas.getChildren().clear();
+				addXYPlane(graphingCanvas, primaryStage);
             }
         });
 		
@@ -114,10 +115,24 @@ public class GraphingCalculator extends Application {
 		
         primaryStage.setScene(graphingScene);
         primaryStage.show();
+		
+		addXYPlane(graphingCanvas, primaryStage);
     }
 	
-	private void updateGraphingCanvas(Pane canvas) {
-		Line line = new Line(0, 0, 100, 500);
+	private void updateGraphingCanvas(Pane canvas, Stage stage) {
+		canvas.getChildren().clear();
+		addXYPlane(canvas, stage);
+		Line line = new Line(0, 0, 100, 100);
 		canvas.getChildren().add(line);
+	}
+	
+	private void addXYPlane(Pane canvas, Stage stage) {
+		double windowX = stage.getX();
+		double windowY = stage.getY();
+		Line xAxis = new Line(windowX / 2.0, 0, windowX / 2.0, windowY / 2.0);
+		Line yAxis = new Line(0, windowY / 2.0, windowX / 2.0, windowY / 2.0);
+		
+		canvas.getChildren().add(xAxis);
+		canvas.getChildren().add(yAxis);
 	}
 }
