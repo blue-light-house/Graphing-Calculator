@@ -3,7 +3,8 @@ import java.util.*;
 import java.lang.Math.*;
 
 public class Calculator {
-	String chars[] = {"(", ")", "^", "*", "/", "+", "-"};
+	String ops[] = {"(", ")", "^", "*", "/", "+", "-"};
+	String constants[] = {"e", "pi", "gratio"};
 	
 	public Calculator() {
 		// test change
@@ -18,7 +19,7 @@ public class Calculator {
 		int lastBeginPos = 0;
 		for (int i = 0; i < trimLength; i++) {
 			String current = Character.toString(trimmedExpression.charAt(i));
-			if (Arrays.asList(chars).contains(current) || current.equals(" ")) {
+			if (Arrays.asList(ops).contains(current) || current.equals(" ")) {
 				String leftSubstring = trimmedExpression.substring(lastBeginPos, i);
 				// System.out.println(leftSubstring);
 				// System.out.println(current);
@@ -118,15 +119,13 @@ public class Calculator {
 		for (Integer i : evaluatePositionsT3) {
 			double dTemp = 0.0;
 			int iTemp = findFirstNonEmpty(expression, i, startPos, endPos, -1);
-			String sTemp = expression[iTemp];
 			expression[iTemp] = "";
-			dTemp = Double.parseDouble(sTemp);
+			dTemp = parseCharacter(expression, iTemp);
 			iTemp = findFirstNonEmpty(expression, i, startPos, endPos, 1);
-			sTemp = expression[iTemp];
 			expression[iTemp] = "";
 			
 			if (expression[i].equals("^")) {
-				dTemp = Math.pow(dTemp, Double.parseDouble(sTemp));
+				dTemp = Math.pow(dTemp, parseCharacter(expression, iTemp));
 			}
 			
 			expression[i] = "";
@@ -151,17 +150,15 @@ public class Calculator {
 		for (Integer i : evaluatePositionsT2) {
 			double dTemp = 0.0;
 			int iTemp = findFirstNonEmpty(expression, i, startPos, endPos, -1);
-			String sTemp = expression[iTemp];
 			expression[iTemp] = "";
-			dTemp = Double.parseDouble(sTemp);
+			dTemp = parseCharacter(expression, iTemp);
 			iTemp = findFirstNonEmpty(expression, i, startPos, endPos, 1);
-			sTemp = expression[iTemp];
 			expression[iTemp] = "";
 			
 			if (expression[i].equals("*")) {
-				dTemp = dTemp * Double.parseDouble(sTemp);
+				dTemp *= parseCharacter(expression, iTemp);
 			} else if (expression[i].equals("/")) {
-				dTemp /= Double.parseDouble(sTemp);
+				dTemp /= parseCharacter(expression, iTemp);
 			}
 			
 			expression[i] = "";
@@ -188,12 +185,11 @@ public class Calculator {
 		double toReturn = Double.parseDouble(expression[startPosT1]);
 		for (Integer i : evaluatePositionsT1) {
 			int iTemp = findFirstNonEmpty(expression, i, startPos, endPos, 1);
-			String sTemp = expression[iTemp];
 			
 			if (expression[i].equals("+")) {
-				toReturn += Double.parseDouble(sTemp);
+				toReturn += parseCharacter(expression, iTemp);
 			} else if (expression[i].equals("-")) {
-				toReturn -= Double.parseDouble(sTemp);
+				toReturn -= parseCharacter(expression, iTemp);
 			}
 		}
 		
@@ -212,7 +208,7 @@ public class Calculator {
 		System.out.println("DIRECTION: " + dir);
 		*/
 		String toReturn = expression[index];
-		while ((toReturn.equals("") || Arrays.asList(chars).contains(toReturn))&& (index < endPos && index >= startPos)) {
+		while ((toReturn.equals("") || Arrays.asList(ops).contains(toReturn))&& (index < endPos && index >= startPos)) {
 			/*
 			System.out.println("CURRENT INDEX " + index);
 			System.out.println("CURRENT VALUE " + toReturn);
@@ -223,7 +219,7 @@ public class Calculator {
 		}
 		
 		try {
-			Double.parseDouble(expression[index]);
+			parseCharacter(expression, index);
 		} catch (NumberFormatException e) {
 			throw new IllegalArgumentException("Exception in findFirstNonempty: Invalid character!");
 		}
@@ -237,6 +233,22 @@ public class Calculator {
 			System.out.println(s);
 		}
 		System.out.println();
+	}
+	
+	private double parseCharacter(String[] expression, int index) {
+		String character = expression[index].toLowerCase();
+		double toReturn = 0;
+		if (Arrays.asList(constants).contains(character)) {
+			if (character.equals("e")) {
+				return Math.E;
+			} else if (character.equals("pi")) {
+				return Math.PI;
+			} else if (character.equals("gratio")) {
+				return 1.61803;
+			}
+		}
+		
+		return Double.parseDouble(character);
 	}
 	
     public static void main(String[] args) {
