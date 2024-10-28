@@ -70,7 +70,6 @@ public class GraphingCalculator extends Application {
             @Override
             public void handle(ActionEvent event) {
 				updateGraphingCanvas(graphingCanvas, primaryStage);
-				
             }
         });
 		Button graphToEvalButton = new Button();
@@ -105,9 +104,9 @@ public class GraphingCalculator extends Application {
  
             @Override
             public void handle(ActionEvent event) {
-				primaryStage.setScene(graphingScene);
 				graphingCanvas.getChildren().clear();
 				addXYPlane(graphingCanvas, primaryStage);
+				primaryStage.setScene(graphingScene);
             }
         });
 		
@@ -117,7 +116,7 @@ public class GraphingCalculator extends Application {
         primaryStage.show();
 		
 		addXYPlane(graphingCanvas, primaryStage);
-    }
+	}
 	
 	private void updateGraphingCanvas(Pane canvas, Stage stage) {
 		canvas.getChildren().clear();
@@ -127,10 +126,22 @@ public class GraphingCalculator extends Application {
 	}
 	
 	private void addXYPlane(Pane canvas, Stage stage) {
+		canvas.getChildren().clear();
 		double windowX = stage.getX();
 		double windowY = stage.getY();
-		Line xAxis = new Line(windowX / 2.0, 0, windowX / 2.0, windowY / 2.0);
-		Line yAxis = new Line(0, windowY / 2.0, windowX / 2.0, windowY / 2.0);
+		Line xAxis = new Line(0, windowY / 2, windowX, windowY / 2);
+		Line yAxis = new Line(windowX / 2, 0, windowX / 2, windowY);
+		/*
+		xAxis.startXProperty().bind(widthProperty().divide(2));
+		xAxis.startYProperty().bind(0);
+		xAxis.endXProperty().bind(widthProperty().divide(2));
+		xAxis.endYProperty().bind(heightProperty().divide(2));
+		
+		yAxis.startXProperty().bind(0);
+		yAxis.startYProperty().bind(heightProperty().divide(2));
+		yAxis.endXProperty().bind(widthProperty().divide(2));
+		yAxis.endYProperty().bind(heightProperty().divide(2));
+		*/
 		
 		canvas.getChildren().add(xAxis);
 		canvas.getChildren().add(yAxis);
