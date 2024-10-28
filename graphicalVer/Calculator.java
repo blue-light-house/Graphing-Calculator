@@ -119,13 +119,13 @@ public class Calculator {
 		for (Integer i : evaluatePositionsT3) {
 			double dTemp = 0.0;
 			int iTemp = findFirstNonEmpty(expression, i, startPos, endPos, -1);
-			expression[iTemp] = "";
 			dTemp = parseCharacter(expression, iTemp);
-			iTemp = findFirstNonEmpty(expression, i, startPos, endPos, 1);
 			expression[iTemp] = "";
+			iTemp = findFirstNonEmpty(expression, i, startPos, endPos, 1);
 			
 			if (expression[i].equals("^")) {
 				dTemp = Math.pow(dTemp, parseCharacter(expression, iTemp));
+				expression[iTemp] = "";
 			}
 			
 			expression[i] = "";
@@ -150,10 +150,9 @@ public class Calculator {
 		for (Integer i : evaluatePositionsT2) {
 			double dTemp = 0.0;
 			int iTemp = findFirstNonEmpty(expression, i, startPos, endPos, -1);
-			expression[iTemp] = "";
 			dTemp = parseCharacter(expression, iTemp);
-			iTemp = findFirstNonEmpty(expression, i, startPos, endPos, 1);
 			expression[iTemp] = "";
+			iTemp = findFirstNonEmpty(expression, i, startPos, endPos, 1);
 			
 			if (expression[i].equals("*")) {
 				dTemp *= parseCharacter(expression, iTemp);
@@ -161,6 +160,7 @@ public class Calculator {
 				dTemp /= parseCharacter(expression, iTemp);
 			}
 			
+			expression[iTemp] = "";
 			expression[i] = "";
 			expression[i-1] = Double.toString(dTemp);
 		}
@@ -191,6 +191,7 @@ public class Calculator {
 			} else if (expression[i].equals("-")) {
 				toReturn -= parseCharacter(expression, iTemp);
 			}
+			
 		}
 		
 		return toReturn;
@@ -199,31 +200,36 @@ public class Calculator {
 	private int findFirstNonEmpty(String[] expression, int startIndex, int startPos, int endPos, int dir) {
 		int index = startIndex < startPos ? startPos : startIndex;
 		index = index > endPos ? endPos : index;
-		/*
+		
 		System.out.println("STARTING NONEMPTY SEARCH WITH FOLLOWING PARAMETERS:");
 		System.out.print("EXPRESSION: ");
 		printExpression(expression);
 		System.out.println("START INDEX: " + startIndex);
 		System.out.println("LEFT BOUND: " + startPos + " RIGHT BOUND: " + endPos);
 		System.out.println("DIRECTION: " + dir);
-		*/
+		
 		String toReturn = expression[index];
-		while ((toReturn.equals("") || Arrays.asList(ops).contains(toReturn))&& (index < endPos && index >= startPos)) {
-			/*
+		while ((toReturn.equals("") || Arrays.asList(ops).contains(toReturn)) && (index < endPos && index >= startPos)) {
+			
+			System.out.println("STEP--------------------------------");
 			System.out.println("CURRENT INDEX " + index);
 			System.out.println("CURRENT VALUE " + toReturn);
 			System.out.println("LEFT BOUND " + startPos + " STARTING AT " + startIndex + " RIGHT BOUND " + endPos);
-			*/
+			
 			index+= dir;
 			toReturn = expression[index];
 		}
 		
+		
+		
 		try {
+			System.out.println("FOUND " + toReturn + " AT INDEX " + index);
 			parseCharacter(expression, index);
 		} catch (NumberFormatException e) {
 			throw new IllegalArgumentException("Exception in findFirstNonempty: Invalid character!");
 		}
 		
+		System.out.println("SUCCESSFULLY RETURNED " + toReturn + " AT INDEX " + index);
 		return index;
 	}
 	
@@ -236,17 +242,19 @@ public class Calculator {
 	}
 	
 	private double parseCharacter(String[] expression, int index) {
-		String character = expression[index].toLowerCase();
-		double toReturn = 0;
-		if (Arrays.asList(constants).contains(character)) {
-			if (character.equals("e")) {
+		String character = expression[index];
+		System.out.println("CHARACTER " + character);
+		if (Arrays.asList(constants).contains(character.toLowerCase())) {
+			if (character.toLowerCase().equals("e")) {
 				return Math.E;
-			} else if (character.equals("pi")) {
+			} else if (character.toLowerCase().equals("pi")) {
 				return Math.PI;
-			} else if (character.equals("gratio")) {
+			} else if (character.toLowerCase().equals("gratio")) {
 				return 1.61803;
 			}
 		}
+		
+		System.out.println("CHARACTER NOT IN CONSTANTS");
 		
 		return Double.parseDouble(character);
 	}
