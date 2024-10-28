@@ -182,7 +182,7 @@ public class Calculator {
 		// Tier 1 Evaluation: Addition, Subtraction
 		// System.out.println("Len" + expression.length);
 		int startPosT1 = findFirstNonEmpty(expression, 0, startPos, endPos, 1);
-		double toReturn = Double.parseDouble(expression[startPosT1]);
+		double toReturn = parseCharacter(expression, startPosT1);
 		for (Integer i : evaluatePositionsT1) {
 			int iTemp = findFirstNonEmpty(expression, i, startPos, endPos, 1);
 			
@@ -200,22 +200,22 @@ public class Calculator {
 	private int findFirstNonEmpty(String[] expression, int startIndex, int startPos, int endPos, int dir) {
 		int index = startIndex < startPos ? startPos : startIndex;
 		index = index > endPos ? endPos : index;
-		
+		/*
 		System.out.println("STARTING NONEMPTY SEARCH WITH FOLLOWING PARAMETERS:");
 		System.out.print("EXPRESSION: ");
 		printExpression(expression);
 		System.out.println("START INDEX: " + startIndex);
 		System.out.println("LEFT BOUND: " + startPos + " RIGHT BOUND: " + endPos);
 		System.out.println("DIRECTION: " + dir);
-		
+		*/
 		String toReturn = expression[index];
 		while ((toReturn.equals("") || Arrays.asList(ops).contains(toReturn)) && (index < endPos && index >= startPos)) {
-			
+			/*
 			System.out.println("STEP--------------------------------");
 			System.out.println("CURRENT INDEX " + index);
 			System.out.println("CURRENT VALUE " + toReturn);
 			System.out.println("LEFT BOUND " + startPos + " STARTING AT " + startIndex + " RIGHT BOUND " + endPos);
-			
+			*/
 			index+= dir;
 			toReturn = expression[index];
 		}
@@ -223,13 +223,13 @@ public class Calculator {
 		
 		
 		try {
-			System.out.println("FOUND " + toReturn + " AT INDEX " + index);
+			// System.out.println("FOUND " + toReturn + " AT INDEX " + index);
 			parseCharacter(expression, index);
 		} catch (NumberFormatException e) {
 			throw new IllegalArgumentException("Exception in findFirstNonempty: Invalid character!");
 		}
 		
-		System.out.println("SUCCESSFULLY RETURNED " + toReturn + " AT INDEX " + index);
+		// System.out.println("SUCCESSFULLY RETURNED " + toReturn + " AT INDEX " + index);
 		return index;
 	}
 	
@@ -243,7 +243,7 @@ public class Calculator {
 	
 	private double parseCharacter(String[] expression, int index) {
 		String character = expression[index];
-		System.out.println("CHARACTER " + character);
+		// System.out.println("CHARACTER " + character);
 		if (Arrays.asList(constants).contains(character.toLowerCase())) {
 			if (character.toLowerCase().equals("e")) {
 				return Math.E;
@@ -254,7 +254,7 @@ public class Calculator {
 			}
 		}
 		
-		System.out.println("CHARACTER NOT IN CONSTANTS");
+		// System.out.println("CHARACTER NOT IN CONSTANTS");
 		
 		return Double.parseDouble(character);
 	}
