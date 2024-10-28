@@ -1,5 +1,5 @@
 import static org.junit.Assert.*;
-
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -118,7 +118,7 @@ public class CalculatorTest {
 	@Test 
 	public void testMathTripleParenthesis3() {
 		String[] answer = {"(", "3", "+", "(", "10", "-", "(","2","^", "2", ")","+", "1",  ")", ")"};
-		assertEquals(1, self.evaluate(answer, 10,  answer.length), 0.005);
+		assertEquals(10, self.evaluate(answer, 0,  answer.length), 0.005);
 	}
 	
 	
