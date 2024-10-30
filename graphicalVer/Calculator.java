@@ -250,7 +250,7 @@ public class Calculator {
 			} else if (character.toLowerCase().equals("pi")) {
 				return Math.PI;
 			} else if (character.toLowerCase().equals("gratio")) {
-				return 1.61803;
+				return (1+ Math.sqrt(5))/2.0;
 			}
 		}
 		
