@@ -3,6 +3,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+
 public class CalculatorTest {
 	Calculator self = null;
 	
@@ -121,6 +122,12 @@ public class CalculatorTest {
 		assertEquals(10, self.evaluate(answer, 0,  answer.length), 0.005);
 	}
 	
+	@Test
+	public void testPi() {
+		String[] answer ={"pi", "+", "0"};
+		assertEquals((Math.PI), self.evaluate(answer, 0, answer.length), 0.005 );
+		
+	}
 	
 
 }
