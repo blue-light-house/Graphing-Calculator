@@ -126,7 +126,30 @@ public class CalculatorTest {
 	public void testPi() {
 		String[] answer ={"pi", "+", "0"};
 		assertEquals((Math.PI), self.evaluate(answer, 0, answer.length), 0.005 );
-		
+	}
+	
+	@Test
+	public void testPi2() {
+		String[] answer ={"pi", "+", "1"};
+		assertEquals((Math.PI+1), self.evaluate(answer, 0, answer.length), 0.005 );
+	}
+	
+	@Test
+	public void testE() {
+		String[] answer ={"e", "+", "0"};
+		assertEquals((Math.E), self.evaluate(answer, 0, answer.length), 0.005 );
+	}
+	
+	@Test
+	public void testE2() {
+		String[] answer ={"e", "*", "2"};
+		assertEquals((Math.E*2), self.evaluate(answer, 0, answer.length), 0.005 );
+	}
+	
+	@Test
+	public void testPiE() {
+		String[] answer ={"e", "*", "pi"};
+		assertEquals((Math.E * Math.PI), self.evaluate(answer, 0, answer.length), 0.005 );
 	}
 	
 
