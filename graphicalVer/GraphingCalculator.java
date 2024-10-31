@@ -14,6 +14,7 @@ public class GraphingCalculator extends Application {
 	private Calculator calc = new Calculator();
 	Scene evaluationScene = null;
 	Scene graphingScene = null;
+	Scene evaluationXScene = null;
 	
     public static void main(String[] args) {
         launch(args);
@@ -37,7 +38,7 @@ public class GraphingCalculator extends Application {
 				if (!boxText.equals("")) {
 					String[] toEvaluate = calc.recognizer(boxText);
 					try {
-						evaluateLabel.setText("Result: " + calc.evaluate(toEvaluate, 0, toEvaluate.length));
+						evaluateLabel.setText("Result: " + calc.evaluate(toEvaluate));
 					} catch (IllegalArgumentException e) {
 						evaluateLabel.setText("Invalid argument! Source: " + e.getMessage());
 					}
@@ -48,6 +49,9 @@ public class GraphingCalculator extends Application {
         });
 		Button evalToGraphButton = new Button();
 		evalToGraphButton.setText("GRAPHING MODE");
+		
+		Button evalToEvalXButton = new Button();
+		evalToEvalXButton.setText("EVALAUTION AT X MODE");
         
         VBox evaluationRoot = new VBox(8);
 		evaluationRoot.setAlignment(Pos.CENTER);
@@ -55,8 +59,61 @@ public class GraphingCalculator extends Application {
         evaluationRoot.getChildren().add(evaluateButton);
 		evaluationRoot.getChildren().add(evaluateLabel);
 		evaluationRoot.getChildren().add(evalToGraphButton);
+		evaluationRoot.getChildren().add(evalToEvalXButton);
 		//evaluationRoot.setHalignment(child, HPos.CENTER);
 		evaluationScene = new Scene(evaluationRoot, 600, 500);
+		
+		// EVALUATE OVER X SCENE
+		
+		TextField evaluateXText = new TextField();
+		TextField evaluateXVal = new TextField();
+        Button evaluateXButton = new Button();
+		Label evaluateXLabel = new Label("NO CURRENT EVALUATION");
+		Label evaluateXInstructions = new Label("Give your expression with a capital X as a variable.");
+        evaluateXButton.setText("Evaluate");
+        evaluateXButton.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent event) {
+				String boxText = evaluateXText.getText();
+				String xText = evaluateXVal.getText();
+				if (!boxText.equals("")) {
+					if (!xText.equals("")) {
+						String[] toEvaluate = calc.recognizer(boxText);
+						try {
+							try {
+								evaluateXLabel.setText("Result: " + calc.evaluateAtX(toEvaluate, xText));
+							} catch (IllegalArgumentException e) {
+								evaluateXLabel.setText("Invalid argument! Source: " + e.getMessage());
+							}
+						} catch (NumberFormatException e) {
+							evaluateXLabel.setText("You must provide a valid X value!");
+						}
+					} else {
+						evaluateXLabel.setText("You must provide an X value!");
+					}
+				} else {
+					evaluateXLabel.setText("You must provide an expression!");
+				}
+            }
+        });
+		
+		Button evalXToGraphButton = new Button();
+		evalXToGraphButton.setText("GRAPHING MODE");
+		
+		Button evalXToEvalButton = new Button();
+		evalXToEvalButton.setText("EVALUATION MODE");
+        
+        VBox evaluationXRoot = new VBox(8);
+		evaluationXRoot.setAlignment(Pos.CENTER);
+		evaluationXRoot.getChildren().add(evaluateXInstructions);
+		evaluationXRoot.getChildren().add(evaluateXText);
+		evaluationXRoot.getChildren().add(evaluateXVal);
+        evaluationXRoot.getChildren().add(evaluateXButton);
+		evaluationXRoot.getChildren().add(evaluateXLabel);
+		evaluationXRoot.getChildren().add(evalXToGraphButton);
+		evaluationXRoot.getChildren().add(evalXToEvalButton);
+		//evaluationRoot.setHalignment(child, HPos.CENTER);
+		evaluationXScene = new Scene(evaluationXRoot, 600, 500);
 		
 		// GRAPHING SCENE
 		
@@ -85,6 +142,20 @@ public class GraphingCalculator extends Application {
             }
         });
 		
+		Button graphToEvalXButton = new Button();
+		graphToEvalXButton.setText("EVALUATION AT X MODE");
+        graphToEvalXButton.setOnAction(new EventHandler<ActionEvent>() {
+ 
+            @Override
+            public void handle(ActionEvent event) {
+				evaluateXLabel.setText("NO CURRENT EVALUATION");
+				evaluateXText.setText("");
+				evaluateXVal.setText("");
+				primaryStage.setScene(evaluationXScene);
+				
+            }
+        });
+		
 		graphingRoot.getChildren().add(graphingCanvas);
 		graphingRoot.setRowIndex(graphingCanvas, 0);
 		graphingRoot.setColumnIndex(graphingCanvas, 0);
@@ -98,6 +169,10 @@ public class GraphingCalculator extends Application {
 		graphingRoot.setRowIndex(graphToEvalButton, 2);
 		graphingRoot.setColumnIndex(graphToEvalButton, 0);
 		
+		graphingRoot.getChildren().add(graphToEvalXButton);
+		graphingRoot.setRowIndex(graphToEvalXButton, 2);
+		graphingRoot.setColumnIndex(graphToEvalXButton, 1);
+		
 		graphingScene = new Scene(graphingRoot, 600, 500);
 		
 		evalToGraphButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -107,6 +182,39 @@ public class GraphingCalculator extends Application {
 				graphingCanvas.getChildren().clear();
 				addXYPlane(graphingCanvas, primaryStage);
 				primaryStage.setScene(graphingScene);
+            }
+        });
+		
+		evalXToGraphButton.setOnAction(new EventHandler<ActionEvent>() {
+ 
+            @Override
+            public void handle(ActionEvent event) {
+				graphingCanvas.getChildren().clear();
+				addXYPlane(graphingCanvas, primaryStage);
+				primaryStage.setScene(graphingScene);
+            }
+        });
+		
+		evalToEvalXButton.setOnAction(new EventHandler<ActionEvent>() {
+ 
+            @Override
+            public void handle(ActionEvent event) {
+				evaluateXLabel.setText("NO CURRENT EVALUATION");
+				evaluateXText.setText("");
+				evaluateXVal.setText("");
+				primaryStage.setScene(evaluationXScene);
+				
+            }
+        });
+		
+		evalXToEvalButton.setOnAction(new EventHandler<ActionEvent>() {
+ 
+            @Override
+            public void handle(ActionEvent event) {
+				evaluateLabel.setText("NO CURRENT EVALUATION");
+				evaluateText.setText("");
+				primaryStage.setScene(evaluationScene);
+				
             }
         });
 		

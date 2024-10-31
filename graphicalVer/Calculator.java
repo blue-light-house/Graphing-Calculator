@@ -58,7 +58,28 @@ public class Calculator {
 		return returnExpression;
 	}
 	
-	public double evaluate (String[] expression, int startPos, int endPos) throws IllegalArgumentException {
+	public double evaluate (String[] expression) {
+		String[] modifiableExpression = expression.clone();
+		return evaluate(expression, 0, expression.length);
+	}
+	
+	public double evaluateWithReplacement(String[] expression, HashMap<String, String> vars) {
+		String[] modifiableExpression = expression.clone();
+		for (int i = 0; i < modifiableExpression.length; i++) {
+			if (vars.containsKey(modifiableExpression[i])) {
+				modifiableExpression[i] = vars.get(modifiableExpression[i]);
+			}
+		}
+		return evaluate(modifiableExpression, 0, modifiableExpression.length);
+	}
+	
+	public double evaluateAtX(String[] expression, String xVal) {
+		HashMap<String, String> vars = new HashMap<String,String>();
+		vars.put("X", xVal);
+		return evaluateWithReplacement(expression, vars);
+	}
+	
+	private double evaluate (String[] expression, int startPos, int endPos) throws IllegalArgumentException {
 		ArrayList<Integer> evaluatePositionsT3 = new ArrayList<Integer>();
 		ArrayList<Integer> evaluatePositionsT2 = new ArrayList<Integer>();
 		ArrayList<Integer> evaluatePositionsT1 = new ArrayList<Integer>();
