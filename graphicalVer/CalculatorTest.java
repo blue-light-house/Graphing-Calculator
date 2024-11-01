@@ -46,110 +46,110 @@ public class CalculatorTest {
 	@Test
 	public void testMathAddition() {
 		String[] answer = {"3", "+", "3", "+", "5"};
-		assertEquals(11.0, self.evaluate(answer, 0, answer.length), 0.005);
+		assertEquals(11.0, self.evaluate(answer), 0.005);
 	}
 	
 	@Test
 	public void testMathMultiplication() {
 		String[] answer = {"3", "*", "3", "+", "5"};
-		assertEquals(14.0, self.evaluate(answer, 0, answer.length), 0.005);
+		assertEquals(14.0, self.evaluate(answer), 0.005);
 	}
 	
 	@Test
 	public void testMathDivision() {
 		String[] answer = {"3", "*", "3", "/", "5"};
-		assertEquals(1.8, self.evaluate(answer, 0, answer.length), 0.005);
+		assertEquals(1.8, self.evaluate(answer), 0.005);
 	}
 	
 	@Test
 	public void testMathExponent() {
 		String[] answer = {"3", "*", "3", "^", "2"};
-		assertEquals(27.0, self.evaluate(answer, 0, answer.length), 0.005);
+		assertEquals(27.0, self.evaluate(answer), 0.005);
 	}
 	
 	@Test
 	public void testMathExponent2() {
 		String[] answer = {"2", "^", "(", "3", "^", "2", ")"};
-		assertEquals(512.0, self.evaluate(answer, 0, answer.length), 0.005);
+		assertEquals(512.0, self.evaluate(answer), 0.005);
 	}
 	
 	@Test
 	public void testMathSubtraction() {
 		String[] answer = {"3", "-", "3", "*", "5"};
-		assertEquals(-12.0, self.evaluate(answer, 0, answer.length), 0.005);
+		assertEquals(-12.0, self.evaluate(answer), 0.005);
 	}
 	
 	@Test
 	public void testPemdas() {
 		String[] answer = {"3", "*", "3", "-", "5", "-", "1", "*", "12"};
-		assertEquals(-8.0, self.evaluate(answer, 0, answer.length), 0.005);
+		assertEquals(-8.0, self.evaluate(answer), 0.005);
 	}
 	
 	@Test
 	public void testPemdas2() {
 		String[] answer = {"2", "*", "(", "2", "-", "5", "^", "2", ")"};
-		assertEquals(-46.0, self.evaluate(answer, 0, answer.length), 0.005);
+		assertEquals(-46.0, self.evaluate(answer), 0.005);
 	}
 	
 	@Test
 	public void testMathParenthesis() {
 		String[] answer = {"3", "*", "(", "3", "+", "3", ")"};
-		assertEquals(18.0, self.evaluate(answer, 0, answer.length), 0.005);
+		assertEquals(18.0, self.evaluate(answer), 0.005);
 	}
 	
 	@Test
 	public void testMathDoubleParenthesis() {
 		String[] answer = {"1", "+", "(", "3", "*", "(", "2", "+", "3",")", ")"};
-		assertEquals(16.0, self.evaluate(answer, 0, answer.length), 0.005);
+		assertEquals(16.0, self.evaluate(answer), 0.005);
 	}
 	
 	@Test
 	public void testMathDoubleParenthesis2() {
 		String[] answer = {"3", "*", "(", "(", "3", "+", "3",")", ")"};
-		assertEquals(18.0, self.evaluate(answer, 0, answer.length), 0.005);
+		assertEquals(18.0, self.evaluate(answer), 0.005);
 	}
 	
 	@Test
 	public void testMathTripleParenthesis2() {
 		String[] answer = {"2", "^", "(", "3", "+", "(", "10", "-", "(","2","^", "2", ")","+", "1",  ")", ")", "+", "9" };
-		assertEquals(1033.0, self.evaluate(answer, 0, answer.length), 0.005);
+		assertEquals(1033.0, self.evaluate(answer), 0.005);
 
 	}
 	
 	@Test 
 	public void testMathTripleParenthesis3() {
 		String[] answer = {"(", "3", "+", "(", "10", "-", "(","2","^", "2", ")","+", "1",  ")", ")"};
-		assertEquals(10, self.evaluate(answer, 0,  answer.length), 0.005);
+		assertEquals(10, self.evaluate(answer), 0.005);
 	}
 	
 	@Test
 	public void testPi() {
 		String[] answer ={"pi", "+", "0"};
-		assertEquals((Math.PI), self.evaluate(answer, 0, answer.length), 0.005 );
+		assertEquals((Math.PI), self.evaluate(answer), 0.005 );
 	}
 	
 	@Test
 	public void testPi2() {
 		String[] answer ={"pi", "+", "1"};
-		assertEquals((Math.PI+1), self.evaluate(answer, 0, answer.length), 0.005 );
+		assertEquals((Math.PI+1), self.evaluate(answer), 0.005 );
 	}
 	
 	@Test
 	public void testE() {
 		String[] answer ={"e", "+", "0"};
-		assertEquals((Math.E), self.evaluate(answer, 0, answer.length), 0.005 );
+		assertEquals((Math.E), self.evaluate(answer), 0.005 );
 	}
 	
 	@Test
 	public void testE2() {
 		String[] answer ={"e", "*", "2"};
-		assertEquals((Math.E*2), self.evaluate(answer, 0, answer.length), 0.005 );
+		assertEquals((Math.E*2), self.evaluate(answer), 0.005 );
 	}
-	
+
 	@Test
 	public void testPiE() {
 		String[] answer ={"e", "*", "pi"};
-		assertEquals((Math.E * Math.PI), self.evaluate(answer, 0, answer.length), 0.005 );
+		assertEquals((Math.E * Math.PI), self.evaluate(answer), 0.005 );
 	}
 	
 
