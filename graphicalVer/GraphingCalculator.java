@@ -117,16 +117,20 @@ public class GraphingCalculator extends Application {
 		
 		// GRAPHING SCENE
 		
-		GridPane graphingRoot = new GridPane();
+		VBox graphingRoot = new VBox(8);
 		graphingRoot.setAlignment(Pos.CENTER);
 		Pane graphingCanvas = new Pane();
 		Button updateGraphButton = new Button();
+		TextField graphingExpression = new TextField();
+		TextField graphingBounds = new TextField();
 		updateGraphButton.setText("UPDATE GRAPH");
         updateGraphButton.setOnAction(new EventHandler<ActionEvent>() {
  
             @Override
             public void handle(ActionEvent event) {
-				updateGraphingCanvas(graphingCanvas, primaryStage);
+				// String[] bounds = calc.recognizer(graphingBounds.getText());
+				//updateGraphingCanvas(graphingCanvas, primaryStage, calc.recognizer(graphingExpression.getText()), Double.parseDouble(bounds[0]), Double.parseDouble(bounds[1]), Double.parseDouble(bounds[2]), Double.parseDouble(bounds[3]));
+				updateGraphingCanvas(graphingCanvas, primaryStage, calc.recognizer(graphingExpression.getText()), -5, 5, -5, 5);
             }
         });
 		Button graphToEvalButton = new Button();
@@ -157,21 +161,29 @@ public class GraphingCalculator extends Application {
         });
 		
 		graphingRoot.getChildren().add(graphingCanvas);
-		graphingRoot.setRowIndex(graphingCanvas, 0);
-		graphingRoot.setColumnIndex(graphingCanvas, 0);
+		// graphingRoot.setRowIndex(graphingCanvas, 0);
+		// graphingRoot.setColumnIndex(graphingCanvas, 0);
 		graphingRoot.setAlignment(Pos.CENTER);
 		
+		graphingRoot.getChildren().add(graphingExpression);
+		// graphingRoot.setRowIndex(updateGraphButton, 1);
+		// graphingRoot.setColumnIndex(updateGraphButton, 0);
+		
+		graphingRoot.getChildren().add(graphingBounds);
+		// graphingRoot.setRowIndex(updateGraphButton, 2);
+		//graphingRoot.setColumnIndex(updateGraphButton, 0);
+		
 		graphingRoot.getChildren().add(updateGraphButton);
-		graphingRoot.setRowIndex(updateGraphButton, 1);
-		graphingRoot.setColumnIndex(updateGraphButton, 0);
+		// graphingRoot.setRowIndex(updateGraphButton, 3);
+		// graphingRoot.setColumnIndex(updateGraphButton, 0);
 		
 		graphingRoot.getChildren().add(graphToEvalButton);
-		graphingRoot.setRowIndex(graphToEvalButton, 2);
-		graphingRoot.setColumnIndex(graphToEvalButton, 0);
+		// graphingRoot.setRowIndex(graphToEvalButton, 4);
+		// graphingRoot.setColumnIndex(graphToEvalButton, 0);
 		
 		graphingRoot.getChildren().add(graphToEvalXButton);
-		graphingRoot.setRowIndex(graphToEvalXButton, 2);
-		graphingRoot.setColumnIndex(graphToEvalXButton, 1);
+		// graphingRoot.setRowIndex(graphToEvalXButton, 4);
+		// graphingRoot.setColumnIndex(graphToEvalXButton, 1);
 		
 		graphingScene = new Scene(graphingRoot, 600, 500);
 		
@@ -226,11 +238,29 @@ public class GraphingCalculator extends Application {
 		addXYPlane(graphingCanvas, primaryStage);
 	}
 	
-	private void updateGraphingCanvas(Pane canvas, Stage stage) {
+	private void updateGraphingCanvas(Pane canvas, Stage stage, String[] expression, double startX, double endX, double highY, double lowY) {
 		canvas.getChildren().clear();
+		double windowX = stage.getX();
+		double windowY = stage.getY();
+		
+		System.out.println("WINDOWX " + windowX + " WINDOWY " + windowY);
 		addXYPlane(canvas, stage);
-		Line line = new Line(0, 0, 100, 100);
-		canvas.getChildren().add(line);
+		for (double i = startX; i <= endX; i+=((endX-startX)/100)) {
+			double yTemp = calc.evaluateAtX(expression, Double.toString(i));
+			System.out.println("POINT AT (" + i + ", " + yTemp + ")");
+			Circle circle = new Circle();
+			canvas.getChildren().add(circle);
+			
+			double circleX = ((endX - startX)/(i - startX)) * windowX;
+			double circleY = (windowY / 2) + (yTemp);
+			double circleRadius;// = (endX - startX) / 100;
+			circleRadius = 5;
+			
+			System.out.println("CIRCLE X " + circleX + " CIRCLE Y " + circleY + " CIRCLE RADIUS " + circleRadius);
+			circle.setCenterX(circleX);
+			circle.setCenterY(circleY);
+			circle.setRadius(circleRadius);
+		}
 	}
 	
 	private void addXYPlane(Pane canvas, Stage stage) {
