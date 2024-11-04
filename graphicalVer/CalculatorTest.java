@@ -152,5 +152,7 @@ public class CalculatorTest {
 		assertEquals((Math.E * Math.PI), self.evaluate(answer), 0.005 );
 	}
 	
+	
+	
 
 }
