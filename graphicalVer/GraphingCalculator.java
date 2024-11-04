@@ -123,14 +123,22 @@ public class GraphingCalculator extends Application {
 		Button updateGraphButton = new Button();
 		TextField graphingExpression = new TextField();
 		TextField graphingBounds = new TextField();
+		
+		Slider graphingSlider = new Slider(50, 1000, 100);
+		graphingSlider.setShowTickMarks(true);
+		graphingSlider.setShowTickLabels(true);
+		graphingSlider.setMajorTickUnit(25);
+		graphingSlider.setBlockIncrement(10);
+		
 		updateGraphButton.setText("UPDATE GRAPH");
         updateGraphButton.setOnAction(new EventHandler<ActionEvent>() {
  
             @Override
             public void handle(ActionEvent event) {
+				int coarseness = (int) graphingSlider.getValue();
 				// String[] bounds = calc.recognizer(graphingBounds.getText());
 				//updateGraphingCanvas(graphingCanvas, primaryStage, calc.recognizer(graphingExpression.getText()), Double.parseDouble(bounds[0]), Double.parseDouble(bounds[1]), Double.parseDouble(bounds[2]), Double.parseDouble(bounds[3]));
-				updateGraphingCanvas(graphingCanvas, primaryStage, calc.recognizer(graphingExpression.getText()), -5, 5, -5, 5);
+				updateGraphingCanvas(graphingCanvas, primaryStage, calc.recognizer(graphingExpression.getText()), -5, 5, -5, 5, coarseness);
             }
         });
 		Button graphToEvalButton = new Button();
@@ -173,6 +181,8 @@ public class GraphingCalculator extends Application {
 		// graphingRoot.setRowIndex(updateGraphButton, 2);
 		//graphingRoot.setColumnIndex(updateGraphButton, 0);
 		
+		graphingRoot.getChildren().add(graphingSlider);
+		
 		graphingRoot.getChildren().add(updateGraphButton);
 		// graphingRoot.setRowIndex(updateGraphButton, 3);
 		// graphingRoot.setColumnIndex(updateGraphButton, 0);
@@ -193,6 +203,9 @@ public class GraphingCalculator extends Application {
             public void handle(ActionEvent event) {
 				graphingCanvas.getChildren().clear();
 				addXYPlane(graphingCanvas, primaryStage);
+				graphingSlider.setValue(100);
+				graphingExpression.setText("");
+				graphingBounds.setText("");
 				primaryStage.setScene(graphingScene);
             }
         });
@@ -203,6 +216,9 @@ public class GraphingCalculator extends Application {
             public void handle(ActionEvent event) {
 				graphingCanvas.getChildren().clear();
 				addXYPlane(graphingCanvas, primaryStage);
+				graphingSlider.setValue(100);
+				graphingExpression.setText("");
+				graphingBounds.setText("");
 				primaryStage.setScene(graphingScene);
             }
         });
@@ -238,25 +254,25 @@ public class GraphingCalculator extends Application {
 		addXYPlane(graphingCanvas, primaryStage);
 	}
 	
-	private void updateGraphingCanvas(Pane canvas, Stage stage, String[] expression, double startX, double endX, double highY, double lowY) {
+	private void updateGraphingCanvas(Pane canvas, Stage stage, String[] expression, double startX, double endX, double highY, double lowY, int coarseness) {
 		canvas.getChildren().clear();
 		double windowX = stage.getX();
 		double windowY = stage.getY();
 		
-		System.out.println("WINDOWX " + windowX + " WINDOWY " + windowY);
+		// System.out.println("WINDOWX " + windowX + " WINDOWY " + windowY);
 		addXYPlane(canvas, stage);
-		for (double i = startX; i <= endX; i+=((endX-startX)/100)) {
+		for (double i = startX; i <= endX; i+=((endX-startX)/coarseness)) {
 			double yTemp = calc.evaluateAtX(expression, Double.toString(i));
-			System.out.println("POINT AT (" + i + ", " + yTemp + ")");
+			// System.out.println("POINT AT (" + i + ", " + yTemp + ")");
 			Circle circle = new Circle();
 			canvas.getChildren().add(circle);
 			
-			double circleX = ((endX - startX)/(i - startX)) * windowX;
-			double circleY = (windowY / 2) + (yTemp);
-			double circleRadius;// = (endX - startX) / 100;
-			circleRadius = 5;
+			double circleX = ((i - startX)/(endX - startX)) * windowX;
+			//double circleY = (windowY / 2) + (yTemp >= 0 ? (yTemp / highY) : (yTemp / Math.abs(lowY)))*(windowY/2);
+			double circleY = (windowY / 2) + (yTemp / highY)*(windowY/2);
+			double circleRadius = (windowY) / 100;
 			
-			System.out.println("CIRCLE X " + circleX + " CIRCLE Y " + circleY + " CIRCLE RADIUS " + circleRadius);
+			// System.out.println("CIRCLE X " + circleX + " CIRCLE Y " + circleY + " CIRCLE RADIUS " + circleRadius);
 			circle.setCenterX(circleX);
 			circle.setCenterY(circleY);
 			circle.setRadius(circleRadius);
