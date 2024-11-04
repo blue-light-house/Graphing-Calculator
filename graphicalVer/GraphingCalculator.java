@@ -124,7 +124,7 @@ public class GraphingCalculator extends Application {
 		TextField graphingExpression = new TextField();
 		TextField graphingBounds = new TextField();
 		
-		Slider graphingSlider = new Slider(50, 1000, 100);
+		Slider graphingSlider = new Slider(50, 1000, 500);
 		graphingSlider.setShowTickMarks(true);
 		graphingSlider.setShowTickLabels(true);
 		graphingSlider.setMajorTickUnit(25);
@@ -203,7 +203,7 @@ public class GraphingCalculator extends Application {
             public void handle(ActionEvent event) {
 				graphingCanvas.getChildren().clear();
 				addXYPlane(graphingCanvas, primaryStage);
-				graphingSlider.setValue(100);
+				graphingSlider.setValue(500);
 				graphingExpression.setText("");
 				graphingBounds.setText("");
 				primaryStage.setScene(graphingScene);
@@ -216,7 +216,7 @@ public class GraphingCalculator extends Application {
             public void handle(ActionEvent event) {
 				graphingCanvas.getChildren().clear();
 				addXYPlane(graphingCanvas, primaryStage);
-				graphingSlider.setValue(100);
+				graphingSlider.setValue(500);
 				graphingExpression.setText("");
 				graphingBounds.setText("");
 				primaryStage.setScene(graphingScene);
