@@ -10,7 +10,7 @@ Date Last Modfiied: 2024-11-08
 */
 public class Calculator {
 	// Define the symbols used in mathematical operations
-	String ops[] = {"(", ")", "^", "*", "/", "+", "-"};
+	String ops[] = {"(", ")", "sin", "cos", "tan", "^", "*", "/", "+", "-"};
 	// Define basic mathematical constants e, pi, and the golden ratio
 	String constants[] = {"e", "pi", "gratio"};
 	// These definitions are used for later recognition of the operations and constants within an expression
@@ -127,7 +127,7 @@ public class Calculator {
 	* @throws IllegalArgumentException if the given expression is invalid
 	*/
 	private double evaluate (String[] expression, int startPos, int endPos) throws IllegalArgumentException {
-		// Defines three ArrayLists to track the positions of operations
+		// Defines ArrayLists to track the positions of operations
 		
 		// Tier 1 operations are addition and subtraction
 		ArrayList<Integer> evaluatePositionsT1 = new ArrayList<Integer>();
@@ -138,12 +138,15 @@ public class Calculator {
 		// Tier 3 operations are exponents
 		ArrayList<Integer> evaluatePositionsT3 = new ArrayList<Integer>();
 		
+		// Tier 4 operations are trigonometric functions
+		ArrayList<Integer> evaluatePositionsT4 = new ArrayList<Integer>();
+		
 			/*
-			System.out.println("BEFORE T4");
+			System.out.println("BEFORE T5");
 			printExpression(expression);
 			*/
 		
-		// Tier 4: Parentheses
+		// Tier 5: Parentheses
 		int openFound = 0;
 		int closedFound = 0;
 		int openFirst = 0;
@@ -181,6 +184,45 @@ public class Calculator {
 		// If there is a mismatch between the number of open and closed parentheses, throw an exception
 		if (openFound != closedFound) {
 			throw new IllegalArgumentException("Exception in evaluate (T4): Number of parentheses do not match!");
+		}
+		
+			/*
+			System.out.println("BEFORE T4");
+			printExpression(expression);
+			*/
+		
+		// Tier 4: Trigonometric functions
+		
+		// Iterates over the expression and locates all trigonometric functions
+		for (int i = startPos; i < endPos; i++) {
+			if (expression[i].equals("sin") || expression[i].equals("cos") || expression[i].equals("tan")) {
+				evaluatePositionsT4.add(i);
+			}
+		}
+		
+		// Tier 4 Evaluation: Trigonometric Functions
+		
+		// Evaluates all trigonometric functions
+		// Trig functions are evaluated right to left, allowing for nesting. This may cause unexpected behavior if parentheses are omitted
+		while (!evaluatePositionsT4.isEmpty()) {
+			int i = evaluatePositionsT4.remove(evaluatePositionsT4.size()-1);
+			double dTemp = evaluate(expression, i+1, endPos);
+			
+			
+			if (expression[i].equals("sin")) {
+				dTemp = Math.sin(dTemp);
+			} else if (expression[i].equals("cos")) {
+				dTemp = Math.cos(dTemp);
+			} else if (expression[i].equals("tan")) {
+				dTemp = Math.tan(dTemp);
+			}
+			
+			for (int e = i; e < endPos; e++) {
+				expression[e] = "";
+			}
+			
+			
+			expression[i] = Double.toString(dTemp);
 		}
 		
 			/*
