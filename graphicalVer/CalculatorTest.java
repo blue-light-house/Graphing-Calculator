@@ -188,5 +188,12 @@ public class CalculatorTest {
 		String[] answer = {"2", "^", "-99999999999999"};
 		assertEquals(0, self.evaluate(answer), 0.00005);
 	}
+	
+	@Test
+	public void testAtX4() {
+		String[] answer = {"(", "(", "(", "(", "(", "(", "(", "(", "(", "1", "+", "(", "X", ")", "-", "2", ")", "-", "1", ")", "-", "1", ")", "-", "1", ")", "-", "1", ")", "-", "1", ")", "-", "1", ")", "-", "1", ")", "-", "1", ")" };
+		assertEquals(1, self.evaluateAtX(answer, "10"), 0.05);	
+	}
+	
 
 }
