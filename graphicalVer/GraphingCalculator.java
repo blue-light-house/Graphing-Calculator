@@ -10,16 +10,31 @@ import javafx.stage.Stage;
 import java.lang.Math;
 import java.util.*;
 
+/**
+GraphingCalculator: provides a graphical frontend to evaluate and graph functions
+@author blue-light-house
+@version 0.8
+Date Last Modfiied: 2024-11-08
+*/
 public class GraphingCalculator extends Application {
+	// Creates a calculator object for use in evaluation
 	private Calculator calc = new Calculator();
 	Scene evaluationScene = null;
 	Scene graphingScene = null;
 	Scene evaluationXScene = null;
 	
+	/**
+	* main: launches the program
+	* @param args: an array of strings as options
+	*/
     public static void main(String[] args) {
         launch(args);
     }
     
+	/**
+	* start: sets the stage and handles the main loop of the graphing calculator
+	* @param primaryStage: the stage used throughout
+	*/
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("CS3141 Team Software Project: Graphing Calculator");
@@ -254,48 +269,66 @@ public class GraphingCalculator extends Application {
 		addXYPlane(graphingCanvas, primaryStage);
 	}
 	
+	/**
+	* updateGraphingCanvas: given a pane, graphs the given expression
+	* @param canvas: the canvas to display the graph in
+	* @param stage: the stage the canvas sits in
+	* @param expression: an array of strings representing a mathematical expression
+	* @param startX: a double value representing the left bound of the graph
+	* @param endX: a double value representing the right bound of the graph
+	* @param highY: a double value representing the upper bound of the graph
+	* @param lowY: a double value representing the lower bound of the graph
+	* @param coarseness: an integer value representing the number of steps in the graph
+	*/
 	private void updateGraphingCanvas(Pane canvas, Stage stage, String[] expression, double startX, double endX, double highY, double lowY, int coarseness) {
 		canvas.getChildren().clear();
 		double windowX = stage.getX();
 		double windowY = stage.getY();
 		
-		// System.out.println("WINDOWX " + windowX + " WINDOWY " + windowY);
+			// System.out.println("WINDOWX " + windowX + " WINDOWY " + windowY);
 		addXYPlane(canvas, stage);
+		// Steps coarseness times and draws a small dot at the corresponding evaluation
 		for (double i = startX; i <= endX; i+=((endX-startX)/coarseness)) {
 			double yTemp = calc.evaluateAtX(expression, Double.toString(i));
-			// System.out.println("POINT AT (" + i + ", " + yTemp + ")");
+				// System.out.println("POINT AT (" + i + ", " + yTemp + ")");
 			Circle circle = new Circle();
 			canvas.getChildren().add(circle);
 			
 			double circleX = ((i - startX)/(endX - startX)) * windowX;
-			//double circleY = (windowY / 2) + (yTemp >= 0 ? (yTemp / highY) : (yTemp / Math.abs(lowY)))*(windowY/2);
+				//double circleY = (windowY / 2) + (yTemp >= 0 ? (yTemp / highY) : (yTemp / Math.abs(lowY)))*(windowY/2);
 			double circleY = (windowY / 2) + (yTemp / highY)*(windowY/2);
 			double circleRadius = (windowY) / 100;
 			
-			// System.out.println("CIRCLE X " + circleX + " CIRCLE Y " + circleY + " CIRCLE RADIUS " + circleRadius);
+				// System.out.println("CIRCLE X " + circleX + " CIRCLE Y " + circleY + " CIRCLE RADIUS " + circleRadius);
 			circle.setCenterX(circleX);
 			circle.setCenterY(circleY);
 			circle.setRadius(circleRadius);
 		}
 	}
 	
+	/**
+	* addXYPlane: adds a centered XY plane to the given canvas
+	* @param canvas: the pane to add the plane in
+	* @param stage: the stage the canvas sits in
+	*/
 	private void addXYPlane(Pane canvas, Stage stage) {
 		canvas.getChildren().clear();
 		double windowX = stage.getX();
 		double windowY = stage.getY();
+		
 		Line xAxis = new Line(0, windowY / 2, windowX, windowY / 2);
 		Line yAxis = new Line(windowX / 2, 0, windowX / 2, windowY);
-		/*
-		xAxis.startXProperty().bind(widthProperty().divide(2));
-		xAxis.startYProperty().bind(0);
-		xAxis.endXProperty().bind(widthProperty().divide(2));
-		xAxis.endYProperty().bind(heightProperty().divide(2));
-		
-		yAxis.startXProperty().bind(0);
-		yAxis.startYProperty().bind(heightProperty().divide(2));
-		yAxis.endXProperty().bind(widthProperty().divide(2));
-		yAxis.endYProperty().bind(heightProperty().divide(2));
-		*/
+			/*
+			xAxis.startXProperty().bind(widthProperty().divide(2));
+			xAxis.startYProperty().bind(0);
+			xAxis.endXProperty().bind(widthProperty().divide(2));
+			xAxis.endYProperty().bind(heightProperty().divide(2));
+			
+			yAxis.startXProperty().bind(0);
+			yAxis.startYProperty().bind(heightProperty().divide(2));
+			yAxis.endXProperty().bind(widthProperty().divide(2));
+			yAxis.endYProperty().bind(heightProperty().divide(2));
+			*/
 		
 		canvas.getChildren().add(xAxis);
 		canvas.getChildren().add(yAxis);
