@@ -171,6 +171,22 @@ public class CalculatorTest {
 		assertEquals(8, self.evaluateAtX(answer, "2"), 0.05);	
 	}
 	
+	@Test
+	public void testAtX3() {
+		String[] answer = {"2","*","X"};
+		assertEquals(Math.PI * 2, self.evaluateAtX(answer, "pi"), 0.05);	
+	}
 	
+	@Test
+	public void testReallyBigNumbers() {
+		String[] answer = {"2", "^", "99999999999999","^", "9999999999999999999999999999999999"};
+		assertNotEquals(2^9, self.evaluate(answer), 0.005);
+	}
+	
+	@Test
+	public void testReallySmallNumbers() {
+		String[] answer = {"2", "^", "-99999999999999"};
+		assertEquals(0, self.evaluate(answer), 0.00005);
+	}
 
 }
