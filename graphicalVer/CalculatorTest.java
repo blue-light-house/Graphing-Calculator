@@ -152,6 +152,24 @@ public class CalculatorTest {
 		assertEquals((Math.E * Math.PI), self.evaluate(answer), 0.005 );
 	}
 	
+	@Test
+	public void testManyParentheses() {
+		String[] answer = {"(", "(", "(", "(", "(", "(", "(", "(", "(", "(", "(", "(", "(", "(", "(", "(", "(", "(", "(", "(", "(", "(", "1", "+", "1", ")", "+", "1", ")", "+", "1", ")", "+", "1", ")", "+", "1", ")", "+", "1", ")", "+", "1", ")", "+", "1", ")", "+", "1", ")", "+", "1", ")", "+", "1", ")", "+", "1", ")", "+", "1", ")", "+", "1", ")", "+", "1", ")", "+", "1", ")", "+", "1", ")", "+", "1", ")", "+", "1", ")", "+", "1", ")", "+", "1", ")", "+", "1", ")"};
+		assertEquals(23, self.evaluate(answer), 0.005);
+	}
+	// evaluateAtX: <answer, x value that needs to be a string>
+	
+	@Test
+	public void testAtX() {
+		String[] answer = {"2", "*", "X"};
+		assertEquals(8, self.evaluateAtX(answer, "4"), 0.05);	
+	}
+	
+	@Test
+	public void testAtX2() {
+		String[] answer = {"2", "^", "(", "X", "+", "1", ")"};
+		assertEquals(8, self.evaluateAtX(answer, "2"), 0.05);	
+	}
 	
 	
 
