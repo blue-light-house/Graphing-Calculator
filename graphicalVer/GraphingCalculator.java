@@ -9,7 +9,7 @@ import javafx.geometry.*;
 import javafx.stage.Stage;
 import java.lang.Math;
 import java.util.*;
- 
+
 public class GraphingCalculator extends Application {
 	private Calculator calc = new Calculator();
 	Scene evaluationScene = null;
