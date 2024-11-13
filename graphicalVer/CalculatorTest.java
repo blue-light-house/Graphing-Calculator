@@ -195,5 +195,40 @@ public class CalculatorTest {
 		assertEquals(1, self.evaluateAtX(answer, "10"), 0.05);	
 	}
 	
-
+	@Test
+	public void testSine() {
+		String[] answer = {"sin", "pi"};
+		assertEquals(0, self.evaluate(answer), 0.005);
+	}
+	
+	@Test
+	public void testSine2() {
+		String[] answer = {"sin", "(", "pi", "/", "2", ")"};
+		assertEquals(1, self.evaluate(answer), 0.005);
+	}
+	
+	@Test
+	public void testSine3() {
+		String[] answer = {"sin", "(", "3", "*", "pi", "/", "2", ")"};
+		assertEquals(-1, self.evaluate(answer), 0.005);
+	}
+	
+	@Test
+	public void testCosine() {
+		String[] answer = {"cos", "pi"};
+		assertEquals(-1, self.evaluate(answer), 0.005);
+	}
+	
+	@Test
+	public void testCosine2() {
+		String[] answer = {"cos", "(", "pi", "/", "2", ")"};
+		assertEquals(0, self.evaluate(answer), 0.005);
+	}
+	
+	@Test
+	public void testCosine3() {
+		String[] answer = {"cos", "(", "3", "*", "pi", "/", "2", ")"};
+		assertEquals(0, self.evaluate(answer), 0.005);
+	}
+	
 }
