@@ -190,6 +190,7 @@ public class Calculator {
 			System.out.println("BEFORE T4");
 			printExpression(expression);
 			*/
+			
 		
 		// Tier 4: Trigonometric functions
 		
@@ -206,18 +207,21 @@ public class Calculator {
 		// Trig functions are evaluated right to left, allowing for nesting. This may cause unexpected behavior if parentheses are omitted
 		while (!evaluatePositionsT4.isEmpty()) {
 			int i = evaluatePositionsT4.remove(evaluatePositionsT4.size()-1);
-			double dTemp = evaluate(expression, i+1, endPos);
+			int itemPlace = findFirstNonEmpty(expression, i+1, startPos, endPos, 1);
+			double dTemp = parseCharacter(expression, itemPlace);
 			
-			
-			if (expression[i].equals("sin")) {
+			if (expression[i].toLowerCase().equals("sin")) {
+				// System.out.println("SIN OF " + dTemp);
 				dTemp = Math.sin(dTemp);
-			} else if (expression[i].equals("cos")) {
+			} else if (expression[i].toLowerCase().equals("cos")) {
+				// System.out.println("COS OF " + dTemp);
 				dTemp = Math.cos(dTemp);
-			} else if (expression[i].equals("tan")) {
+			} else if (expression[i].toLowerCase().equals("tan")) {
+				// System.out.println("TAN OF " + dTemp);
 				dTemp = Math.tan(dTemp);
 			}
 			
-			for (int e = i; e < endPos; e++) {
+			for (int e = i; e <= itemPlace; e++) {
 				expression[e] = "";
 			}
 			
@@ -364,7 +368,7 @@ public class Calculator {
 		
 		// While the string at the current position is whitepsace or an operation, iterate in the given direction
 		String toReturn = expression[index];
-		while ((toReturn.equals("") || Arrays.asList(ops).contains(toReturn)) && (index < endPos && index >= startPos)) {
+		while ((toReturn.equals("") || Arrays.asList(ops).contains(toReturn.toLowerCase())) && (index < endPos && index >= startPos)) {
 				/*
 				System.out.println("STEP--------------------------------");
 				System.out.println("CURRENT INDEX " + index);
