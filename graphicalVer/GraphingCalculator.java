@@ -9,6 +9,7 @@ import javafx.geometry.*;
 import javafx.stage.Stage;
 import java.lang.Math;
 import java.util.*;
+import javafx.scene.paint.Color;
 
 /**
 GraphingCalculator: provides a graphical frontend to evaluate and graph functions
@@ -22,6 +23,8 @@ public class GraphingCalculator extends Application {
 	Scene evaluationScene = null;
 	Scene graphingScene = null;
 	Scene evaluationXScene = null;
+	Scene settingsScene = null;
+	Color graphingColor = null;
 	
 	/**
 	* main: launches the program
@@ -67,6 +70,9 @@ public class GraphingCalculator extends Application {
 		
 		Button evalToEvalXButton = new Button();
 		evalToEvalXButton.setText("EVALAUTION AT X MODE");
+		
+		Button evalToSettingsButton = new Button();
+		evalToSettingsButton.setText("SETTINGS");
         
         VBox evaluationRoot = new VBox(8);
 		evaluationRoot.setAlignment(Pos.CENTER);
@@ -75,6 +81,7 @@ public class GraphingCalculator extends Application {
 		evaluationRoot.getChildren().add(evaluateLabel);
 		evaluationRoot.getChildren().add(evalToGraphButton);
 		evaluationRoot.getChildren().add(evalToEvalXButton);
+		evaluationRoot.getChildren().add(evalToSettingsButton);
 		//evaluationRoot.setHalignment(child, HPos.CENTER);
 		evaluationScene = new Scene(evaluationRoot, 600, 500);
 		
@@ -117,6 +124,9 @@ public class GraphingCalculator extends Application {
 		
 		Button evalXToEvalButton = new Button();
 		evalXToEvalButton.setText("EVALUATION MODE");
+		
+		Button evalXToSettingsButton = new Button();
+		evalXToSettingsButton.setText("SETTINGS");
         
         VBox evaluationXRoot = new VBox(8);
 		evaluationXRoot.setAlignment(Pos.CENTER);
@@ -127,6 +137,7 @@ public class GraphingCalculator extends Application {
 		evaluationXRoot.getChildren().add(evaluateXLabel);
 		evaluationXRoot.getChildren().add(evalXToGraphButton);
 		evaluationXRoot.getChildren().add(evalXToEvalButton);
+		evaluationXRoot.getChildren().add(evalXToSettingsButton);
 		//evaluationRoot.setHalignment(child, HPos.CENTER);
 		evaluationXScene = new Scene(evaluationXRoot, 600, 500);
 		
@@ -134,6 +145,7 @@ public class GraphingCalculator extends Application {
 		
 		VBox graphingRoot = new VBox(8);
 		graphingRoot.setAlignment(Pos.CENTER);
+		graphingRoot.setFillWidth(false);
 		Pane graphingCanvas = new Pane();
 		Button updateGraphButton = new Button();
 		TextField graphingExpression = new TextField();
@@ -183,6 +195,17 @@ public class GraphingCalculator extends Application {
             }
         });
 		
+		Button graphToSettingsButton = new Button();
+		graphToSettingsButton.setText("SETTINGS");
+        graphToSettingsButton.setOnAction(new EventHandler<ActionEvent>() {
+ 
+            @Override
+            public void handle(ActionEvent event) {
+				primaryStage.setScene(settingsScene);
+				
+            }
+        });
+		
 		graphingRoot.getChildren().add(graphingCanvas);
 		// graphingRoot.setRowIndex(graphingCanvas, 0);
 		// graphingRoot.setColumnIndex(graphingCanvas, 0);
@@ -209,6 +232,8 @@ public class GraphingCalculator extends Application {
 		graphingRoot.getChildren().add(graphToEvalXButton);
 		// graphingRoot.setRowIndex(graphToEvalXButton, 4);
 		// graphingRoot.setColumnIndex(graphToEvalXButton, 1);
+		
+		graphingRoot.getChildren().add(graphToSettingsButton);
 		
 		graphingScene = new Scene(graphingRoot, 600, 500);
 		
@@ -261,9 +286,105 @@ public class GraphingCalculator extends Application {
             }
         });
 		
+		evalToSettingsButton.setOnAction(new EventHandler<ActionEvent>() {
+ 
+            @Override
+            public void handle(ActionEvent event) {
+				primaryStage.setScene(settingsScene);
+				
+            }
+        });
+		
+		evalXToSettingsButton.setOnAction(new EventHandler<ActionEvent>() {
+ 
+            @Override
+            public void handle(ActionEvent event) {
+				primaryStage.setScene(settingsScene);
+				
+            }
+        });
+		
+		// SETTINGS
+		
+        Button changeColorButton = new Button();
+		changeColorButton.setText("CHANGE COLOR (CURRENT: BLACK)");
+		graphingColor = Color.BLACK;
+		changeColorButton.setOnAction(new EventHandler<ActionEvent>() {
+ 
+            @Override
+            public void handle(ActionEvent event) {
+				if (graphingColor.equals(Color.BLACK)) {
+					changeColorButton.setText("CHANGE COLOR (CURRENT: RED)");
+					graphingColor = Color.RED;
+				} else if (graphingColor.equals(Color.RED)) {
+					changeColorButton.setText("CHANGE COLOR (CURRENT: BLUE)");
+					graphingColor = Color.BLUE;
+				} else if (graphingColor.equals(Color.BLUE)) {
+					changeColorButton.setText("CHANGE COLOR (CURRENT: GREEN)");
+					graphingColor = Color.GREEN;
+				} else if (graphingColor.equals(Color.GREEN)) {
+					changeColorButton.setText("CHANGE COLOR (CURRENT: BLACK)");
+					graphingColor = Color.BLACK;
+				}
+				
+            }
+        });
+	
+		
+		Button settingsToEvalButton = new Button();
+        settingsToEvalButton.setText("EVALUATION MODE");
+		settingsToEvalButton.setOnAction(new EventHandler<ActionEvent>() {
+ 
+            @Override
+            public void handle(ActionEvent event) {
+				evaluateLabel.setText("NO CURRENT EVALUATION");
+				evaluateText.setText("");
+				primaryStage.setScene(evaluationScene);
+				
+            }
+        });
+		Button settingsToEvalXButton = new Button();
+        settingsToEvalXButton.setText("EVALUATION AT X MODE");
+		settingsToEvalXButton.setOnAction(new EventHandler<ActionEvent>() {
+ 
+            @Override
+            public void handle(ActionEvent event) {
+				evaluateXLabel.setText("NO CURRENT EVALUATION");
+				evaluateXText.setText("");
+				evaluateXVal.setText("");
+				primaryStage.setScene(evaluationXScene);
+				
+            }
+        });
+		Button settingsToGraphButton = new Button();
+        settingsToGraphButton.setText("GRAPHING MODE");
+		settingsToGraphButton.setOnAction(new EventHandler<ActionEvent>() {
+ 
+            @Override
+            public void handle(ActionEvent event) {
+				graphingCanvas.getChildren().clear();
+				addXYPlane(graphingCanvas, primaryStage);
+				graphingSlider.setValue(500);
+				graphingExpression.setText("");
+				graphingBounds.setText("");
+				primaryStage.setScene(graphingScene);
+            }
+        });
+		
+		VBox settingsRoot = new VBox(8);
+		settingsRoot.setAlignment(Pos.CENTER);
+		settingsRoot.getChildren().add(changeColorButton);
+		
+		settingsRoot.getChildren().add(settingsToEvalButton);
+		settingsRoot.getChildren().add(settingsToEvalXButton);
+		settingsRoot.getChildren().add(settingsToGraphButton);
+		//evaluationRoot.setHalignment(child, HPos.CENTER);
+		settingsScene = new Scene(settingsRoot, 600, 500);
+		
 		// WINDOW DRESSING
 		
         primaryStage.setScene(graphingScene);
+		primaryStage.setResizable(false);
         primaryStage.show();
 		
 		addXYPlane(graphingCanvas, primaryStage);
@@ -303,6 +424,10 @@ public class GraphingCalculator extends Application {
 			circle.setCenterX(circleX);
 			circle.setCenterY(circleY);
 			circle.setRadius(circleRadius);
+			circle.setFill(graphingColor);
+			
+			//canvas.setTopAnchor(circle, circleY);
+			//canvas.setLeftAnchor(circle, circleX);
 		}
 	}
 	
