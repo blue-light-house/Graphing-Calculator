@@ -231,4 +231,24 @@ public class CalculatorTest {
 		assertEquals(0, self.evaluate(answer), 0.005);
 	}
 	
+	@Test
+	public void testTangent() {
+		String[] answer = {"tan", "0"};
+		assertEquals(0, self.evaluate(answer), 0.005);
+	}
+	
+	@Test
+	public void testTangent2() {
+		String[] answer = {"tan", "pi"};
+		assertEquals(0, self.evaluate(answer), 0.005);
+	}
+	
+	@Test
+	public void testSinCos() {
+		String[] answer = {"sin", "cos", "pi"};
+		assertEquals(-0.8414, self.evaluate(answer), 0.005);
+	}
+	
+	
+	
 }
