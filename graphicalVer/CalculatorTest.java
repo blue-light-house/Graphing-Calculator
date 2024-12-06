@@ -249,6 +249,17 @@ public class CalculatorTest {
 		assertEquals(-0.8414, self.evaluate(answer), 0.005);
 	}
 	
+	@Test
+	public void testCosSin() {
+		String[] answer = {"cos", "sin", "pi"};
+		assertEquals(1, self.evaluate(answer), 0.005);
+	}
+	
+	@Test
+	public void testCosSinTan() {
+		String[] answer = {"cos", "sin", "tan", "pi"};
+		assertEquals(1, self.evaluate(answer), 0.005);
+	}
 	
 	
 }
