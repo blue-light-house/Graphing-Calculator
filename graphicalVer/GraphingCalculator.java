@@ -42,6 +42,9 @@ public class GraphingCalculator extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("CS3141 Team Software Project: Graphing Calculator");
 		
+		double WINDOWX = 200;
+		double WINDOWY = 200;
+		
 		// EVALUATION SCENE
 		
 		TextField evaluateText = new TextField();
@@ -150,6 +153,7 @@ public class GraphingCalculator extends Application {
 		Button updateGraphButton = new Button();
 		TextField graphingExpression = new TextField();
 		TextField graphingBounds = new TextField();
+		Label graphingLabel = new Label("Enter your expression in the top field. Enter your square bounds in the bottom field.");
 		
 		Slider graphingSlider = new Slider(50, 1000, 500);
 		graphingSlider.setShowTickMarks(true);
@@ -163,9 +167,14 @@ public class GraphingCalculator extends Application {
             @Override
             public void handle(ActionEvent event) {
 				int coarseness = (int) graphingSlider.getValue();
-				// String[] bounds = calc.recognizer(graphingBounds.getText());
-				//updateGraphingCanvas(graphingCanvas, primaryStage, calc.recognizer(graphingExpression.getText()), Double.parseDouble(bounds[0]), Double.parseDouble(bounds[1]), Double.parseDouble(bounds[2]), Double.parseDouble(bounds[3]));
-				updateGraphingCanvas(graphingCanvas, primaryStage, calc.recognizer(graphingExpression.getText()), -5, 5, -5, 5, coarseness);
+				//String[] bounds = graphingBounds.getText().split(" ");
+				try {
+					int bounds = Integer.parseInt(graphingBounds.getText());
+					//updateGraphingCanvas(graphingCanvas, primaryStage, calc.recognizer(graphingExpression.getText()), Double.parseDouble(bounds[0]), Double.parseDouble(bounds[1]), Double.parseDouble(bounds[2]), Double.parseDouble(bounds[3]), coarseness);
+					updateGraphingCanvas(graphingCanvas, primaryStage, calc.recognizer(graphingExpression.getText()), -1*bounds, bounds, bounds, -1*bounds, coarseness);
+				} catch(Exception e) {
+					graphingLabel.setText("Invalid or no argument for graph! Source: " + e.getMessage());
+				}
             }
         });
 		Button graphToEvalButton = new Button();
@@ -211,6 +220,8 @@ public class GraphingCalculator extends Application {
 		// graphingRoot.setColumnIndex(graphingCanvas, 0);
 		graphingRoot.setAlignment(Pos.CENTER);
 		
+		graphingRoot.getChildren().add(graphingLabel);
+		
 		graphingRoot.getChildren().add(graphingExpression);
 		// graphingRoot.setRowIndex(updateGraphButton, 1);
 		// graphingRoot.setColumnIndex(updateGraphButton, 0);
@@ -242,10 +253,11 @@ public class GraphingCalculator extends Application {
             @Override
             public void handle(ActionEvent event) {
 				graphingCanvas.getChildren().clear();
-				addXYPlane(graphingCanvas, primaryStage);
+				addXYPlane(graphingCanvas, primaryStage, WINDOWX, WINDOWY);
 				graphingSlider.setValue(500);
 				graphingExpression.setText("");
 				graphingBounds.setText("");
+				graphingLabel.setText("Enter your expression in the top field. Enter your square bounds in the bottom field.");
 				primaryStage.setScene(graphingScene);
             }
         });
@@ -255,10 +267,11 @@ public class GraphingCalculator extends Application {
             @Override
             public void handle(ActionEvent event) {
 				graphingCanvas.getChildren().clear();
-				addXYPlane(graphingCanvas, primaryStage);
+				addXYPlane(graphingCanvas, primaryStage, WINDOWX, WINDOWY);
 				graphingSlider.setValue(500);
 				graphingExpression.setText("");
 				graphingBounds.setText("");
+				graphingLabel.setText("Enter your expression in the top field. Enter your square bounds in the bottom field.");
 				primaryStage.setScene(graphingScene);
             }
         });
@@ -363,10 +376,11 @@ public class GraphingCalculator extends Application {
             @Override
             public void handle(ActionEvent event) {
 				graphingCanvas.getChildren().clear();
-				addXYPlane(graphingCanvas, primaryStage);
+				addXYPlane(graphingCanvas, primaryStage, WINDOWX, WINDOWY);
 				graphingSlider.setValue(500);
 				graphingExpression.setText("");
 				graphingBounds.setText("");
+				graphingLabel.setText("Enter your expression in the top field. Enter your square bounds in the bottom field.");
 				primaryStage.setScene(graphingScene);
             }
         });
@@ -384,10 +398,10 @@ public class GraphingCalculator extends Application {
 		// WINDOW DRESSING
 		
         primaryStage.setScene(graphingScene);
-		primaryStage.setResizable(false);
+		//primaryStage.setResizable(false);
         primaryStage.show();
 		
-		addXYPlane(graphingCanvas, primaryStage);
+		addXYPlane(graphingCanvas, primaryStage, WINDOWX, WINDOWY);
 	}
 	
 	/**
@@ -403,28 +417,32 @@ public class GraphingCalculator extends Application {
 	*/
 	private void updateGraphingCanvas(Pane canvas, Stage stage, String[] expression, double startX, double endX, double highY, double lowY, int coarseness) {
 		canvas.getChildren().clear();
-		double windowX = stage.getX();
-		double windowY = stage.getY();
+		//double windowX = stage.getX();
+		//double windowY = stage.getY();
+		double windowX = 200;
+		double windowY = 200;
 		
 			// System.out.println("WINDOWX " + windowX + " WINDOWY " + windowY);
-		addXYPlane(canvas, stage);
+		addXYPlane(canvas, stage, windowX, windowY);
 		// Steps coarseness times and draws a small dot at the corresponding evaluation
 		for (double i = startX; i <= endX; i+=((endX-startX)/coarseness)) {
 			double yTemp = calc.evaluateAtX(expression, Double.toString(i));
 				// System.out.println("POINT AT (" + i + ", " + yTemp + ")");
 			Circle circle = new Circle();
-			canvas.getChildren().add(circle);
 			
 			double circleX = ((i - startX)/(endX - startX)) * windowX;
 				//double circleY = (windowY / 2) + (yTemp >= 0 ? (yTemp / highY) : (yTemp / Math.abs(lowY)))*(windowY/2);
-			double circleY = (windowY / 2) + (yTemp / highY)*(windowY/2);
-			double circleRadius = (windowY) / 100;
+			double circleY = (windowY / 2) + (yTemp / lowY)*(windowY/2);
+			double circleRadius = 1; //(windowY) / 100;
 			
 				// System.out.println("CIRCLE X " + circleX + " CIRCLE Y " + circleY + " CIRCLE RADIUS " + circleRadius);
-			circle.setCenterX(circleX);
-			circle.setCenterY(circleY);
-			circle.setRadius(circleRadius);
-			circle.setFill(graphingColor);
+			if (!((circleY > windowY) || (circleY < 0))) {
+				canvas.getChildren().add(circle);
+				circle.setCenterX(circleX);
+				circle.setCenterY(circleY);
+				circle.setRadius(circleRadius);
+				circle.setFill(graphingColor);
+			}
 			
 			//canvas.setTopAnchor(circle, circleY);
 			//canvas.setLeftAnchor(circle, circleX);
@@ -436,10 +454,10 @@ public class GraphingCalculator extends Application {
 	* @param canvas: the pane to add the plane in
 	* @param stage: the stage the canvas sits in
 	*/
-	private void addXYPlane(Pane canvas, Stage stage) {
+	private void addXYPlane(Pane canvas, Stage stage, double windowX, double windowY) {
 		canvas.getChildren().clear();
-		double windowX = stage.getX();
-		double windowY = stage.getY();
+		//double windowX = stage.getX();
+		//double windowY = stage.getY();
 		
 		Line xAxis = new Line(0, windowY / 2, windowX, windowY / 2);
 		Line yAxis = new Line(windowX / 2, 0, windowX / 2, windowY);
